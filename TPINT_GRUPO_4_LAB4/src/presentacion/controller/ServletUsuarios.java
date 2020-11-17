@@ -59,24 +59,58 @@ if(request.getParameter("btnAgregar")!=null) {
 			if(request.getParameter("txtDNIA").toString() != null && request.getParameter("txtDNIA").toString() != "") {
 				user.setDni(request.getParameter("txtDNIA").toString());
 				
+				if(user.getDni().length() > 8 ) {
+					error = 1;
+					String texto;
+					texto = "El tamaño del dni supera la cifra maxima.";
+					request.setAttribute("insert",0);
+					request.setAttribute("Error",texto);
+				}
+				
 			}else {
 				error = 1;
 			}
 			
 			if(request.getParameter("txtCUILA").toString() != null && request.getParameter("txtCUILA").toString() != "") {
 				user.setCuil(request.getParameter("txtCUILA").toString());
+				
+				if(user.getCuil().length() > 11 ) {
+					error = 1;
+					String texto;
+					texto = "El tamaño del cuil supera la cifra maxima.";
+					request.setAttribute("Error",texto);
+					request.setAttribute("insert",0);
+				}
+				
 			}else {
 				error = 1;
 			}
 			
 			if(request.getParameter("txtNombreA").toString() != null && request.getParameter("txtNombreA").toString() != "") {
 				user.setNombre(request.getParameter("txtNombreA").toString());
+				
+				if(user.getNombre().length() > 50 ) {
+					error = 1;
+					String texto;
+					texto = "El nombre debe contener menos de 50 caracteres.";
+					request.setAttribute("Error",texto);
+					request.setAttribute("insert",0);
+				}
+				
 			}else {
 				error = 1;
 			}
 			
 			if(request.getParameter("txtApellidoA").toString() != null && request.getParameter("txtApellidoA").toString() != "") {
 				user.setApellido(request.getParameter("txtApellidoA").toString());
+				
+				if(user.getApellido().length() > 50 ) {
+					error = 1;
+					String texto;
+					texto = "El apellido debe contener menos de 50 caracteres.";
+					request.setAttribute("Error",texto);
+					request.setAttribute("insert",0);
+				}
 			}else {
 				error = 1;
 			}
@@ -100,12 +134,26 @@ if(request.getParameter("btnAgregar")!=null) {
 			
 			if(request.getParameter("txtEmailA").toString() != null && request.getParameter("txtEmailA").toString() != "") {
 				user.setEmail(request.getParameter("txtEmailA").toString());
+				if(user.getEmail().length() > 50 ) {
+					error = 1;
+					String texto;
+					texto = "El e-mail debe contener menos de 50 caracteres.";
+					request.setAttribute("Error",texto);
+					request.setAttribute("insert",0);
+				}
 			}else {
 				error = 1;
 			}
 			
 			if(request.getParameter("txtUsuarioA").toString() != null && request.getParameter("txtUsuarioA").toString() != "") {
 				user.setNombreUsuario(request.getParameter("txtUsuarioA").toString());
+				if(user.getNombreUsuario().length() > 50 || user.getNombreUsuario().length() < 8 ) {
+					error = 1;
+					String texto;
+					texto = "El  nombre de usuario debe contener entre 8 y 50 caracteres.";
+					request.setAttribute("Error",texto);
+					request.setAttribute("insert",0);
+				}
 			}else {
 				error = 1;
 			}
@@ -119,6 +167,13 @@ if(request.getParameter("btnAgregar")!=null) {
 			
 			if(request.getParameter("txtTelefonoA").toString() != null && request.getParameter("txtTelefonoA").toString() != "") {
 				user.setNumeroDeTelefono(request.getParameter("txtTelefonoA").toString());
+				if(user.getNumeroDeTelefono().length() != 10 ) {
+					error = 1;
+					String texto;
+					texto = "El telefono debe contener 10 numeros.";
+					request.setAttribute("Error",texto);
+					request.setAttribute("insert",0);
+				}
 			}else {
 				error = 1;
 			}
@@ -131,6 +186,13 @@ if(request.getParameter("btnAgregar")!=null) {
 			
 			if(request.getParameter("txtContraseniaA").toString() != null && request.getParameter("txtContraseniaA").toString() != "") {
 				user.setContraseña(request.getParameter("txtContraseniaA").toString());
+				if(user.getContraseña().length() > 50 || user.getNombreUsuario().length() < 8 ) {
+					error = 1;
+					String texto;
+					texto = "La contraseña debe contener entre 8 y 50 caracteres.";
+					request.setAttribute("Error",texto);
+					request.setAttribute("insert",0);
+				}
 			}else {
 				error = 1;
 			}
@@ -141,8 +203,15 @@ if(request.getParameter("btnAgregar")!=null) {
 			
 			user.setTipoDeUsuario(t);
 			
+			if(error == 1) {
+				request.setAttribute("insert",0);
+			}
+			else {
+				filas = negocio.insertar(user);
+			}
+				
+		
 			
-			filas = negocio.insertar(user);
 			
 			if(filas == true) {
 				request.setAttribute("insert",1);
@@ -224,15 +293,12 @@ if(request.getParameter("btnAgregar")!=null) {
 				Cuil = request.getParameter("txtCuil").toString(); 
 			}
 			
-			ArrayList<CuentasPorUsuario> listaCu= new ArrayList<CuentasPorUsuario>();
-			CuentasPorUsuarioNegImpl negocio = new CuentasPorUsuarioNegImpl();
-			listaCu = (ArrayList<CuentasPorUsuario>)negocio.ObtenerFiltro(nombreUsuario,Email,DNI,Cuil);
+			ArrayList<Usuarios> listaUsers = new ArrayList<>();
+			UsuariosNegImpl negocio = new UsuariosNegImpl();
+			listaUsers =  negocio.ListarUsuariosFiltro(nombreUsuario, Email, DNI, Cuil);
+			request.setAttribute("BusquedaCu",listaUsers);
 			
-			
-			request.setAttribute("BusquedaCu", listaCu);
-			
-			
-			RequestDispatcher rd = request.getRequestDispatcher("/ABMclientes.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("/ABMclientes.jsp");   
 	        rd.forward(request, response);
 		}
 		

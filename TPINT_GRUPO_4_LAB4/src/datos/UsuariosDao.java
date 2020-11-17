@@ -15,5 +15,5 @@ public interface UsuariosDao {
 	public boolean cambiar_estado(int id);
 	public boolean editar_clave(Usuarios usuario);
 	public Usuarios obtenerUnoxUsuario(String Usuario, String Password);
-
+	public List<Usuarios> ListarUsuariosFiltro (String Nombre,String Email, String Dni, String Cuil);
 }

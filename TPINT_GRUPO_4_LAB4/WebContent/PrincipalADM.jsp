@@ -51,8 +51,12 @@
 		<%! Usuarios u = new Usuarios(); %>
 
 		<span id="perfil" class="navbar-text" style="padding: 10px">
-		<%u= (Usuarios)request.getSession().getAttribute("Session_user");
-         	   System.out.println(u.getApellido()); %>
+		<%
+			if(request.getSession().getAttribute("Session_user") != null){
+				u= (Usuarios)request.getSession().getAttribute("Session_user");
+         	   	System.out.println(u.getApellido()); 
+			}
+         	   %>
          	   <%if(u.getApellido() != null){ %>
       		 <label><%=u.getNombre()+" "+u.getApellido() %></label>
       		 <%} %>

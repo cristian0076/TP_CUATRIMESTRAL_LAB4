@@ -332,5 +332,59 @@ public boolean cambiar_estado(int id) {
 		return estado;
 	}
 
+	@Override
+	public List<Usuarios> ListarUsuariosFiltro(String Nombre, String Email, String Dni, String Cuil) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		cn = new Conexion();
+		cn.Open();
+		
+		List<Usuarios> list = new ArrayList<Usuarios>();
+		try {
+			
+			ResultSet rs = cn.query("select IdUsuario,DNI,Cuil,Nombre,Apellido,FechaNacimiento,Email,NombreUsuario,Contraseña,U.IdGenero,ESTADO,NumeroDeTelefono,Direccion,G.DescripcionGenero from Usuarios As U inner join Generos As G ON G.IdGenero = U.IdGenero where NombreUsuario like '%"+Nombre+"%' and Email like '%"+Email+"%' and DNI like '%"+Dni+"%' and Cuil like '%"+Cuil+"%'");
+			while(rs.next())
+			{
+				Usuarios user = new Usuarios();
+				Generos gen = new Generos();
+				TiposDeUsuarios TipoU = new TiposDeUsuarios();
+				
+				user.setIdUsuario(rs.getInt("IdUsuario"));
+				user.setDni(rs.getString("DNI"));
+				user.setCuil(rs.getString("Cuil"));
+				user.setNombre(rs.getString("Nombre"));
+				user.setApellido(rs.getString("Apellido"));
+				user.setFechaNacimiento(rs.getDate("FechaNacimiento"));
+				user.setEmail(rs.getString("Email"));
+				user.setNombreUsuario(rs.getString("NombreUsuario"));
+				user.setContraseña(rs.getString("Contraseña"));
+				gen.setIdGenero(rs.getInt(10));
+				gen.setDescripcionGenero(rs.getString(14));
+				user.setGenero(gen);
+				user.setEstado(rs.getBoolean("ESTADO"));
+				TipoU.setIdTipoDeUsuario(rs.getInt(12));
+				user.setTipoDeUsuario(TipoU);
+				user.setNumeroDeTelefono(rs.getString("NumeroDeTelefono"));
+				user.setDireccion(rs.getString("Direccion"));
+				
+				list.add(user);
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();			
+		}
+		finally
+		{
+			cn.close();
+		}
+		
+		return list;
+	}
+
 	
 }

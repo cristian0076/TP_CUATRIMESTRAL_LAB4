@@ -21,6 +21,19 @@
 <!--Estilos propios-->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/Estilos/AMBclientes.css" />
 
+
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+  
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+
+
+ <script type="text/javascript">
+ $(document).ready( function () {
+ $('#table_id').DataTable();
+ } );
+ </script>
+
 </head>
 
 <body>
@@ -67,9 +80,17 @@
     </nav>
     
 
-    <h1 style="text-align: center; padding-top: 150px;" class="font-italic text">Administración de clientes</h1><br>
+    <h1 style="text-align: center; padding-top: 50px;" class="font-italic text">Administración de clientes</h1><br>
      			
      			<%!int filas = 2; %>
+     			
+     			         <%! String texto; %>
+                  		 
+                  		 <% 
+                  		 if(request.getAttribute("Error")!= null){
+                  			texto = request.getAttribute("Error").toString(); 
+                  		 }
+                  		 %>
                     
                     <%
                 	if(request.getAttribute("insert")!=null)
@@ -81,13 +102,18 @@
                     
                     <%if(filas == 1)
                     { %>
-                    	<h1  style="text-align: center; color:green; padding-top: 150px;" class="font-italic text">Usuario agregado con exito.</h1>
+                    	<h1 id="1" style="text-align: center; color:green; padding-top: 50px;" class="font-italic text">Usuario agregado con exito.</h1>
+                    	<%filas = 2; %>
                   <%} else{ if(filas == 0){%>
-                  		<h1 style="text-align: center; color:red; padding-top: 150px;" class="font-italic text">Error al agregar usuario.</h1>
-                  		<%filas = 2; %>
-                  		<!-- <script>alert( "Hola ")</script> -->
+                  		<h3 id="1" style="text-align: center; color:red; padding-top: 50px;" class="font-italic text"><%= "Error al agregar usuario."+" "+texto %></h3>
+                  		 <script>alert(<%=texto%>)</script> 
+                  		 <%filas = 2; %>
                   <%}} %>
                   
+                  <% if(filas == 2){ %>
+
+                  	<h1 id="1" style="text-align: center; color:red; padding-top: 50px;" class="font-italic text"></h1>
+                  <%}%>
                   
                   
                   <%
@@ -113,8 +139,7 @@
 				</script>
                   <%}%>
                   
-                  
-                  
+           
                   
                   
     <div class="container-fluid">
@@ -143,7 +168,7 @@
             <div class="col-md-1 col-sm-4"></div>
             <div class="col-md-10 col-sm-4">
 
-<table class="table table-dark" style="overflow:auto; height:400px;">
+<table id="table_id" class="table table-dark" style="overflow:auto; height:400px;">
   <thead>
     <tr>
        <th scope="col"></th>
@@ -176,7 +201,7 @@
 		{
 	%>
 	
-    <tr>
+    <tr style="color:black">
      <%if(user.getEstado() == true){ %>
       <form  method="post" action="ServletUsuarios">
       <td><input   class="btn btn-primary" type="submit" name= "btnEliminar" Onclick="abrir()"  value="Eliminar" ></td>

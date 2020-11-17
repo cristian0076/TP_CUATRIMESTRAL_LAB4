@@ -61,4 +61,10 @@ public class UsuariosNegImpl implements UsuariosNeg{
 	}
 
 
+	@Override
+	public ArrayList<Usuarios> ListarUsuariosFiltro(String Nombre, String Email, String Dni, String Cuil) {
+		return (ArrayList<Usuarios>) userDao.ListarUsuariosFiltro(Nombre, Email, Dni, Cuil);
+	}
+
+
 }
