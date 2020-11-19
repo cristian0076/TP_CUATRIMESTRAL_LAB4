@@ -23,12 +23,23 @@ public class CuentasNegImpl implements CuentasNeg {
 		
 		return (ArrayList<Cuentas>)Cdao.ObtenerCuentas(IdUsuario);
 	}
-
-
+	
 	@Override
+	public boolean insertar(Cuentas cuenta) {
+		return Cdao.insertar(cuenta);
+	}
+	
+	@Override
+	public boolean modificar(Cuentas cuenta) {
+		return Cdao.modificar(cuenta);
+	}
+	
+		@Override
 	public Cuentas obtenerCuenta(int NroCuenta) {
 		// TODO Auto-generated method stub
 		return Cdao.obtenerCuenta(NroCuenta);
 	}
+	
+	
 
 }

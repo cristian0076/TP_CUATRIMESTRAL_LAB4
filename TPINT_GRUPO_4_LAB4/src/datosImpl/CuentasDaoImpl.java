@@ -75,7 +75,73 @@ public class CuentasDaoImpl implements CuentasDao {
 		return list;
 	}
 
+	
 	@Override
+	public boolean insertar(Cuentas cuenta) {
+		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		boolean estado= true;
+		
+		cn= new Conexion();
+		cn.Open();
+		
+		java.sql.Date date= new java.sql.Date(cuenta.getFechaCreacion().getTime());
+		String query= "INSERT INTO `tp_banco`.`cuentas` (`IdTipoDeCuenta`, `FechaCreacion`, `CBU`, `Saldo`, `IdUsuario`) "
+					+ "VALUES ('"+cuenta.getTipoDeCuenta().getIdTipodeCuenta()+"', '"+date+"', '"+cuenta.getCbu()+"', "
+							+ "'"+cuenta.getSaldo()+"', '"+cuenta.getUsuario().getIdUsuario()+"');";
+		try {
+			estado= cn.execute(query);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			cn.close();
+		}
+		return estado;	
+	}
+	
+	
+	@Override
+	public boolean modificar(Cuentas cuenta) {
+
+		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		boolean estado= true;
+		
+		cn= new Conexion();
+		cn.Open();
+		
+		String query= "UPDATE `tp_banco`.`cuentas` SET `Saldo` = '"
+						+cuenta.getSaldo()+"', `IdTipoDeCuenta`= '"+cuenta.getTipoDeCuenta().getIdTipodeCuenta()
+						+"' WHERE NroDeCuenta =" + cuenta.getNroDeCuenta();
+		try {
+			estado= cn.execute(query);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			cn.close();
+		}
+		return estado;	
+	}
+	
+	
 	public Cuentas obtenerCuenta(int NroCuenta) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -128,5 +194,4 @@ public class CuentasDaoImpl implements CuentasDao {
 		
 		return c;
 	}
-
 }
