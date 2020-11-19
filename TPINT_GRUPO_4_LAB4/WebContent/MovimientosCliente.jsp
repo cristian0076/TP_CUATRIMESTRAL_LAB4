@@ -1,3 +1,4 @@
+<%@page import="entidad.Usuarios"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -42,8 +43,13 @@
           </ul>
        </div>
   
+   			<%! Usuarios u = new Usuarios(); %>
        <span id="perfil" class="navbar-text" style="padding: 10px">
-       		<label id="Usuario">Usuario Activo</label>
+       			<%u= (Usuarios)request.getSession().getAttribute("Session_user");
+         	   System.out.println(u.getApellido()); %>
+         	   <%if(u.getApellido() != null){ %>
+      		 <label><%=u.getNombre()+" "+u.getApellido() %></label>
+      		 <%} %>
             <a href="DatosPersonales.jsp">
                 <img
                     src="https://i.ibb.co/Xzbf1pS/usuario.png" />

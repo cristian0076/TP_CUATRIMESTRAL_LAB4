@@ -24,4 +24,11 @@ public class CuentasNegImpl implements CuentasNeg {
 		return (ArrayList<Cuentas>)Cdao.ObtenerCuentas(IdUsuario);
 	}
 
+
+	@Override
+	public Cuentas obtenerCuenta(int NroCuenta) {
+		// TODO Auto-generated method stub
+		return Cdao.obtenerCuenta(NroCuenta);
+	}
+
 }

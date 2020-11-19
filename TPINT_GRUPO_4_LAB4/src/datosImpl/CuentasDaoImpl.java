@@ -75,4 +75,58 @@ public class CuentasDaoImpl implements CuentasDao {
 		return list;
 	}
 
+	@Override
+	public Cuentas obtenerCuenta(int NroCuenta) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		cn= new Conexion();
+		cn.Open();
+		
+		Cuentas c =new Cuentas();
+		try {
+			
+			ResultSet rs = cn.query("SELECT u.IdUsuario, u.Apellido ,u.Cuil, c.NroDeCuenta, c.IdTipoDeCuenta, tc.Descripcion, c.FechaCreacion, c.CBU, c.Saldo FROM cuentas c left join usuarios u ON u.IdUsuario = c.IdUsuario LEFT JOIN tiposdecuentas tc ON c.IdTipoDeCuenta = tc.IdTipoDeCuenta WHERE c.NroDeCuenta = "+ NroCuenta);
+			while(rs.next())
+			{
+				
+				TipoDeCuentas tc = new TipoDeCuentas();
+				Usuarios  u = new Usuarios();
+				TiposDeUsuarios tu = new TiposDeUsuarios();
+				Generos  g= new Generos();
+				
+				c.setNroDeCuenta(rs.getInt("c.NroDeCuenta"));
+				tc.setIdTipodeCuenta(rs.getInt("c.IdTipoDeCuenta"));
+				tc.setDescripcion(rs.getString("tc.Descripcion"));
+				c.setFechaCreacion(rs.getDate("c.FechaCreacion"));
+				c.setCbu(rs.getString("c.CBU"));
+				c.setSaldo(rs.getFloat("c.Saldo"));
+				u.setIdUsuario(rs.getInt("u.IdUsuario"));
+				u.setApellido(rs.getString("u.Apellido"));
+				u.setCuil(rs.getString("u.Cuil"));
+				u.setGenero(g);
+				u.setTipoDeUsuario(tu);
+				c.setTipoDeCuenta(tc);
+				c.setUsuario(u);
+				
+				
+			}
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			cn.close();
+		}
+		
+		
+		return c;
+	}
+
 }

@@ -1,3 +1,4 @@
+<%@page import="entidad.Usuarios"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -12,7 +13,7 @@
    <style type="text/css">
   	<jsp:include page="/Estilos/PrincipalADM.css"></jsp:include>
   </style>
- <title>Transferencias Cliente</title>
+ <title>Transferencias de Cliente</title>
 </head>
 <body>
 
@@ -26,7 +27,7 @@
               </li>
 
       	     <li class="nav-item active">
-                   <a class="nav-link" href="CuentasCli.jsp" style="color:white">Cuentas <span class="sr-only">(current)</span></a>
+                   <a class="nav-link" href="ServletCuentasCliente?IdUsuario=1" style="color:white">Cuentas <span class="sr-only">(current)</span></a>
              </li>
 
               <li class="nav-item dropdown">
@@ -42,8 +43,13 @@
           </ul>
        </div>
   
+   			<%! Usuarios u = new Usuarios(); %>
        <span id="perfil" class="navbar-text" style="padding: 10px">
-       		<label id="Usuario">Usuario Activo</label>
+       			<%u= (Usuarios)request.getSession().getAttribute("Session_user");
+         	   System.out.println(u.getApellido()); %>
+         	   <%if(u.getApellido() != null){ %>
+      		 <label><%=u.getNombre()+" "+u.getApellido() %></label>
+      		 <%} %>
             <a href="DatosPersonales.jsp">
                 <img
                     src="https://i.ibb.co/Xzbf1pS/usuario.png" />
@@ -62,11 +68,11 @@
 <div class="footer-siempre-abajo" style="background-color:white">
 
 <div class="container mt-3">
-  <h2>Transferencias</h2>
+  <h2>Transferir a Cuenta de Terceros</h2>
   <p>Selecciona desde que cuenta queres enviar la plata</p> 
   <h3>Origen</h3> 
   <div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     Seleccionar Cuenta
   </button>
   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -90,7 +96,7 @@
   <h5>Ingrese el CBU Destino</h5> 
   <input class="form-control" id="myInput" type="text" placeholder="">
   <br>
-  <button type="button" class="btn btn-secondary" >
+  <button type="button" class="btn btn-dark" >
   	Confirmar Transferencia
   </button>	
 </div>

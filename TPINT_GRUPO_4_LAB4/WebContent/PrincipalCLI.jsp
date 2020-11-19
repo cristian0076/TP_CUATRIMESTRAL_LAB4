@@ -18,6 +18,9 @@
   
 </head>
 <body>
+
+
+
 <nav class="navbar navbar-expand-lg navbar-light  bg-dark text-white-50">
        <a class="navbar-brand" style="color: white" href="#">Home Bank</a>
        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
@@ -27,7 +30,8 @@
               </li>
 
       	     <li class="nav-item active">
-                   <a class="nav-link" href="CuentasCli.jsp" style="color:white">Cuentas <span class="sr-only">(current)</span></a>
+               
+                   <a class="nav-link" href="ServletCuentasCliente?IdUsuario=1" style="color:white">Cuentas <span class="sr-only">(current)</span></a>
              </li>
 
               <li class="nav-item dropdown">
@@ -43,11 +47,9 @@
           </ul>
        </div>
        
-     
-   			<%! Usuarios u = new Usuarios(); %>
+     <%! Usuarios u = new Usuarios(); %>
        <span id="perfil" class="navbar-text" style="padding: 10px">
-       			<%u= (Usuarios)request.getSession().getAttribute("Session_user");
-         	   System.out.println(u.getApellido()); %>
+       		<%u= (Usuarios)request.getSession().getAttribute("Session_user"); %>	
          	   <%if(u.getApellido() != null){ %>
       		 <label><%=u.getNombre()+" "+u.getApellido() %></label>
       		 <%} %>
