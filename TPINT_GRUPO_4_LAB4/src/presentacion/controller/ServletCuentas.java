@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import entidad.Cuentas;
 import entidad.CuentasPorUsuario;
+import entidad.Usuarios;
 //import entidad.Generos;
 ///import entidad.TipoDeCuentas;
 //import entidad.TiposDeUsuarios;

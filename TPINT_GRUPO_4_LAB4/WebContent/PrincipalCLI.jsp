@@ -36,7 +36,7 @@
         		</a>
         		<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           		<a class="dropdown-item" href="ListarPrestamos.jsp">Mis Prestamos</a>
-         		 <a class="dropdown-item" href="SolicitarPrestamo.jsp">Solicitar Prestamo</a>
+         		 <a class="dropdown-item" href="ServletPrestamoCLI">Solicitar Prestamo</a>
         		</div>
       		  </li>
 
