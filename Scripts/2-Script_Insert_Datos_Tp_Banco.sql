@@ -42,18 +42,18 @@ CREATE PROCEDURE prMovTransferencias (
 	    cuentadestino INT,
         usuarioorigen INT,
         usuariodestino INT,
-        Detalle varchar(50)
+        Detalle varchar(50),
+        IdTipoMovimiento INT
 )
 BEGIN
 
 SET @SaldoOrigen = ((SELECT Saldo From Cuentas WHERE NroDeCuenta= cuentaorigen) - importe);
 SET @SaldoDestino = ((SELECT Saldo From Cuentas WHERE NroDeCuenta= cuentadestino) + importe);
-SET @IdTipodeMovimiento = 4;
   
 UPDATE `tp_banco`.`cuentas` SET `Saldo` = @SaldoOrigen WHERE (`NroDeCuenta` = cuentaorigen);
 UPDATE `tp_banco`.`cuentas` SET `Saldo` = @SaldoDestino WHERE (`NroDeCuenta` = cuentadestino);
-INSERT INTO `tp_banco`.`movimientos` (`IdMovimiento`,`IdUsuario`, `Fecha`, `Detalle`, `Importe`, `IdTipoMovimiento`) VALUES (null,usuarioorigen, (select NOW()), Detalle,(-1 * importe), @IdTipodeMovimiento);
-INSERT INTO `tp_banco`.`movimientos` (`IdMovimiento`,`IdUsuario`, `Fecha`, `Detalle`, `Importe`, `IdTipoMovimiento`) VALUES (null,usuariodestino, (select NOW()), Detalle, (importe) , @IdTipodeMovimiento);
+INSERT INTO `tp_banco`.`movimientos` (`IdMovimiento`,`IdUsuario`, `Fecha`, `Detalle`, `Importe`, `IdTipoMovimiento`,`NroDeCuenta`) VALUES (null,usuarioorigen, (select NOW()), Detalle,(-1 * importe), IdTipoMovimiento, cuentaorigen);
+INSERT INTO `tp_banco`.`movimientos` (`IdMovimiento`,`IdUsuario`, `Fecha`, `Detalle`, `Importe`, `IdTipoMovimiento`,`NroDeCuenta`) VALUES (null,usuariodestino, (select NOW()), Detalle, (importe) , IdTipoMovimiento, cuentadestino);
     
 END //
 DELIMITER ;
