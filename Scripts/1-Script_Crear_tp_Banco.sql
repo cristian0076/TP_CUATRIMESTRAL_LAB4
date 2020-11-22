@@ -44,31 +44,26 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `tp_banco`.`usuarios`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tp_banco`.`usuarios` (
-  `IdUsuario` INT NOT NULL AUTO_INCREMENT,
-  `DNI` VARCHAR(11) NOT NULL,
-  `Cuil` VARCHAR(50) NOT NULL,
-  `Nombre` VARCHAR(50) NOT NULL,
-  `Apellido` VARCHAR(50) NOT NULL,
-  `FechaNacimiento` DATE NULL DEFAULT NULL,
-  `Email` VARCHAR(50) NOT NULL,
-  `NombreUsuario` VARCHAR(50) NOT NULL,
-  `Contraseña` VARCHAR(50) NOT NULL,
-  `IdGenero` INT NOT NULL,
-  `ESTADO` BIT(1) NOT NULL,
-  `IdTipoDeUsuario` INT NOT NULL,
-  `NumeroDeTelefono` VARCHAR(50) NULL DEFAULT NULL,
-  `Direccion` VARCHAR(50) NULL DEFAULT NULL,
+ `IdUsuario` int NOT NULL AUTO_INCREMENT,
+  `DNI` varchar(11) NOT NULL,
+  `Cuil` varchar(50) NOT NULL,
+  `Nombre` varchar(50) NOT NULL,
+  `Apellido` varchar(50) NOT NULL,
+  `FechaNacimiento` date DEFAULT NULL,
+  `Email` varchar(50) NOT NULL,
+  `NombreUsuario` varchar(50) NOT NULL,
+  `Contraseña` varchar(50) NOT NULL,
+  `IdGenero` int NOT NULL,
+  `ESTADO` bit(1) NOT NULL,
+  `IdTipoDeUsuario` int NOT NULL,
+  `NumeroDeTelefono` varchar(50) DEFAULT NULL,
+  `Direccion` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`IdUsuario`),
-  UNIQUE INDEX `NombreUsuario_UNIQUE` (`NombreUsuario` ASC) VISIBLE,
-  UNIQUE INDEX `Email_UNIQUE` (`Email` ASC) VISIBLE,
-  INDEX `IdGenero` (`IdGenero` ASC) VISIBLE,
-  INDEX `IdTipoDeUsuario` (`IdTipoDeUsuario` ASC) VISIBLE,
-  CONSTRAINT `usuarios_ibfk_1`
-    FOREIGN KEY (`IdGenero`)
-    REFERENCES `tp_banco`.`generos` (`IdGenero`),
-  CONSTRAINT `usuarios_ibfk_2`
-    FOREIGN KEY (`IdTipoDeUsuario`)
-    REFERENCES `tp_banco`.`tiposdeusuarios` (`IdTipoDeUsuario`))
+  UNIQUE KEY `NombreUsuario_UNIQUE` (`NombreUsuario`),
+  UNIQUE KEY `Email_UNIQUE` (`Email`),
+   CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`IdGenero`) REFERENCES `generos` (`IdGenero`),
+ CONSTRAINT `usuarios_ibfk_2` FOREIGN KEY (`IdTipoDeUsuario`) REFERENCES `tiposdeusuarios` (`IdTipoDeUsuario`)
+    )
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = latin1;
 
@@ -176,7 +171,7 @@ CREATE TABLE IF NOT EXISTS `tp_banco`.`prestamoporcuota` (
   `IdPrestamo` INT NOT NULL,
   `NroCuota` TINYINT NOT NULL,
   `FechaPago` DATE NOT NULL,
-  `Estado` BIT(1) NOT NULL DEFAULT b'0',
+  `Estado` BIT(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`IdPrestamo`, `NroCuota`),
   CONSTRAINT `prestamoporcuota_ibfk_1`
     FOREIGN KEY (`IdPrestamo`)
