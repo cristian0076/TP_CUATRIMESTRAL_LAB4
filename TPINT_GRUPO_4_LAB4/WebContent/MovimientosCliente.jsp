@@ -1,3 +1,5 @@
+<%@page import="entidad.Movimientos"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="entidad.Usuarios"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -24,8 +26,8 @@
           <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 
 
-      	     <li class="nav-item active">
-                   <a class="nav-link" href="CuentasCli.jsp" style="color:white">Cuentas <span class="sr-only">(current)</span></a>
+              <li class="nav-item active">
+                   <a class="nav-link" href="ServletCuentasCliente?IdUsuario=1" style="color:white">Cuentas <span class="sr-only">(current)</span></a>
              </li>
 
               <li class="nav-item dropdown">
@@ -65,10 +67,29 @@
 
 <div class="footer-siempre-abajo" style="background-color:white">
 
+<% 
+	ArrayList<Movimientos> movimientos = null;
+	if(request.getAttribute("listaMovimientos")!=null)
+		movimientos = (ArrayList<Movimientos>)request.getAttribute("listaMovimientos");
+%>
+
+
+
 <div class="container mt-3">
   <h2>Movimientos</h2>
   <p>Aqui podrá visualizar todos los movimientos generados en su cuenta.</p> 
-  <h5>Caja de Ahorro $ - 197-8852/4</h5> 
+<%
+if(request.getAttribute("NroDeCuentaM")!=null && request.getAttribute("TipoCuentaM")!=null)
+{
+%>
+  <h5><%=request.getAttribute("TipoCuentaM")%> $ - <%=request.getAttribute("NroDeCuentaM")%></h5> 
+<%}else{
+%>
+   <h5></h5> 
+<%}
+%>
+
+
   <input class="form-control" id="myInput" type="text" placeholder="">
   <br>
   <table class="table table-bordered">
@@ -82,20 +103,24 @@
       </tr>
     </thead>
     <tbody id="myTable">
+<%
+	if(movimientos!=null)
+		for(Movimientos m : movimientos)
+		{
+
+%>
+
       <tr>
-        <td>Alta de Cuenta</td>
-        <td>05/02/2020</td>
-        <td>Nueva Caja de Ahorro</td>
-        <td>25.000</td>
-        
+        <td><%=m.getTipoDeMovimiento().getDescripcionTipoDeMovimiento()%></td>
+        <td><%=m.getFecha()%></td>
+        <td><%=m.getDetalle()%></td>
+        <td><%=m.getImporte()%></td>
       </tr>
-      <tr>
-        <td>Alta de Prestamo</td>
-        <td>05/02/2020</td>
-        <td>Prestamo inmobiliario</td>
-        <td>1.000.000</td>
-   
-      </tr>
+<%
+}%>
+
+
+
     </tbody>
   </table> 
 
