@@ -1,3 +1,5 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="entidad.Cuentas"%>
 <%@page import="entidad.Usuarios"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -64,41 +66,95 @@
 
 <div class="footer-siempre-abajo" style="background-color:white">
 
-<div class="container mt-3">
-  <h2>Transferir a Cuenta de Terceros</h2>
-  <p>Selecciona desde que cuenta queres enviar la plata</p> 
-  <h3>Origen</h3> 
-  <div class="dropdown">
-  <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Seleccionar Cuenta
-  </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <a class="dropdown-item" href="#">Caja de Ahorro $ - 126-49872/7 </a>
-    <a class="dropdown-item" href="#">Caja de Ahorro $ - 126-45832/7 </a>
-    <a class="dropdown-item" href="#">Caja de Ahorro $ - 126-56872/7 </a>
-  </div>
-  </div>
- 	
+
+	<form action="ServletTransferencias?Transferencia=2" method="post">
+
+	<div class="container mt-3">	
+ 		<h2>Transferir a Cuenta de Terceros</h2>
+ 	 	<p>Selecciona desde que cuenta queres enviar la plata</p> 
+ 		<h3>Origen</h3> 
+		<div class="dropdown">
+	  		<select class="btn btn-light dropdown-toggle" aria-labelledby="dropdownMenuButton" name="CuentaOrigen">
+	    		<option class="dropdown-item" value="SinSeleccion">Seleccionar Cuenta</option>  
+	  <% 
+		ArrayList<Cuentas> cuentas = null;
+		if(request.getAttribute("CuentasCliente")!=null)
+		{
+			cuentas = (ArrayList<Cuentas>)request.getAttribute("CuentasCliente");
+		}
+
+	
+		%>
+		  
+		<% 	if(cuentas!=null)
+			for(Cuentas cu : cuentas)
+  			{
+		
+			if(cu.getCbu()!=null)
+			{
+		 %>	
+	 	<option class="dropdown-item" value="<%=cu.getNroDeCuenta()%>"><%=cu.getTipoDeCuenta().getDescripcion() %> $ - <%=cu.getNroDeCuenta() %> - $ <%=cu.getSaldo() %></option>
+		<%}
+	}%> 
+		</select>
+	</div>
  	<br> 
   	<div class="input-group mb-3">
- 		<input type="text" class="form-control" placeholder="Detalle / Concepto" aria-label="Recipient's username" aria-describedby="basic-addon2">
+ 		<input type="text" class="form-control" placeholder="Detalle / Concepto" name="txtDetalle" aria-label="Recipient's username" aria-describedby="basic-addon2">
 	</div>
 	<div class="input-group mb-3">
-   		<input type="text" class="form-control" placeholder="Importe" aria-label="Recipient's username" aria-describedby="basic-addon2">
-    </div>
-  
-  
-  <br>
-  <h3>Destino</h3>
-  <h5>Ingrese el CBU Destino</h5> 
-  <input class="form-control" id="myInput" type="text" placeholder="">
-  <br>
-  <button type="button" class="btn btn-dark" >
-  	Confirmar Transferencia
-  </button>	
+   		<input type="text" class="form-control" placeholder="Importe" name="txtImporte" aria-label="Recipient's username" aria-describedby="basic-addon2">
+    </div>	
+	
+	
+  		<br>
+  		<h3>Destino</h3>
+  		<h5>Ingrese el CBU Destino</h5> 
+  		<input class="form-control" id="CbuDestino" type="text" placeholder="" name="CbuDestino">
+  		<br>
+  		<input  type="submit" value="Confirmar Transferencia" class="btn btn-dark" name="btnConfirmar">
+	</div>
+</form>
+	
 </div>
 
+<% String mensaje = null;
+if(request.getAttribute("MensajeTransferencias")!= null)
+{
+	
+	mensaje = request.getAttribute("MensajeTransferencias").toString();
 
+%>
+    <script> 
+    window.onload = function abrir() {
+        $('#modalMensaje').modal('show');
+    }
+    </script>
+<%
+}else{
+
+ %>	
+    
+<%}
+%>
+
+<div class="modal fade" id="modalMensaje" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Mensaje</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <%= mensaje %>
+      </div>
+      <div class="modal-footer">
+          <a href="ServletCuentasCliente?IdUsuario=1" class="btn btn-secondary" >Close</a>
+       </div>
+    </div>
+  </div>
 </div>
 
 

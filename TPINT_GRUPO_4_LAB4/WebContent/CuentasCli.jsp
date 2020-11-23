@@ -103,8 +103,8 @@
     			Transferir
   			</button>
   			<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    		<a class="dropdown-item" href="ServletTransferencias?CuentaPropia=1">Cuenta Propia</a>
-    		<a class="dropdown-item" href="TransferenciasCCTerceros.jsp">Cuenta de Terceros</a>
+    		<a class="dropdown-item" href="ServletTransferencias?Transferencia=1">Cuenta Propia</a>
+    		<a class="dropdown-item" href="ServletTransferencias?Transferencia=2">Cuenta de Terceros</a>
     		</div>
 		<a href="MovimientosCliente.jsp" class="btn btn-secondary">Ver Movimientos</a>
 		</div>

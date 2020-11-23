@@ -9,8 +9,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.ParseConversionEvent;
-
 import entidad.Cuentas;
 import entidad.Movimientos;
 import entidad.Usuarios;
@@ -38,7 +36,7 @@ public class ServletTransferencias extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		if(request.getParameter("CuentaPropia")!= null)
+		if(request.getParameter("Transferencia")!= null)
 		{
 			
 			ArrayList<Cuentas> listaC=new ArrayList<Cuentas>();
@@ -48,10 +46,16 @@ public class ServletTransferencias extends HttpServlet {
 			
 			request.setAttribute("CuentasCliente", listaC);
 			
-			
+			if(request.getParameter("Transferencia").toString().equals("1"))
+			{
 			RequestDispatcher rd = request.getRequestDispatcher("/TransferenciasCCPropia.jsp");   
 	        rd.forward(request, response);
-	    
+			}
+			else
+			{
+				RequestDispatcher rd = request.getRequestDispatcher("/TransferenciasCCTerceros.jsp");   
+		        rd.forward(request, response);
+			}
 		}
 		
 		
@@ -62,10 +66,9 @@ public class ServletTransferencias extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		if(request.getParameter("CuentaPropia")!= null)
+		if(request.getParameter("Transferencia")!= null)
 		{
-			
-			int error = 0;
+		  	int error = 0;
 			float importe = 0;
 			int cuentaorigen= 0;
 			int cuentadestino= 0;
@@ -74,12 +77,12 @@ public class ServletTransferencias extends HttpServlet {
 			int tipomovimiento= 4;
 			String detalle = null;
 			Cuentas c = new Cuentas();
+			Cuentas c2 = new Cuentas();
 			CuentasNegImpl cuentasNeg= new CuentasNegImpl();
 			MovimientosNegImpl transferencia= new MovimientosNegImpl();
-			boolean filas = false;
 			String mensaje;
-					
-						
+			String DirTransferencia="";
+			
 			if(request.getParameter("CuentaOrigen").toString().equals("SinSeleccion") == false)
 			{
 			cuentaorigen =Integer.parseInt(request.getParameter("CuentaOrigen").toString());				
@@ -87,7 +90,6 @@ public class ServletTransferencias extends HttpServlet {
 			}else {
 				error= 1;
 			}
-			
 			
 			if(request.getParameter("txtDetalle").toString().length() > 0)
 			{
@@ -104,26 +106,70 @@ public class ServletTransferencias extends HttpServlet {
 				error =1;
 			}
 			
-			if(request.getParameter("CuentaDestino").toString().equals("SinSeleccion") == false && request.getParameter("CuentaDestino").toString().equals(request.getParameter("CuentaOrigen").toString()) == false )
+			if(request.getParameter("Transferencia").toString().equals("2")==true)
 			{
-			cuentadestino = Integer.parseInt(request.getParameter("CuentaDestino").toString());				
-			}else {
+				if(request.getParameter("CbuDestino")!= null && request.getParameter("CbuDestino").toString().length() > 0 )
+				{
+				System.out.print(request.getParameter("CbuDestino").toString());
+				c2= cuentasNeg.obtenerCuenta((request.getParameter("CbuDestino").toString()));
+				}else {
 				error= 1;
+				}
+				  DirTransferencia = "/TransferenciasCCTerceros.jsp";
 			}
+			else
+			{
+				if(request.getParameter("CuentaDestino").toString().equals("SinSeleccion") == false && request.getParameter("CuentaDestino").toString().equals(request.getParameter("CuentaOrigen").toString()) == false )
+					{
+					c2= cuentasNeg.obtenerCuenta(Integer.parseInt(request.getParameter("CuentaDestino").toString()));
+					}else {
+						error= 1;
+					}
+				  
+				  DirTransferencia = "/TransferenciasCCPropia.jsp";
+			}
+			
+			
+			if(c2.getCbu() == null)
+			{
+				mensaje = "No se pudo realizar la transferencia, el CBU ingresado no se corresponde con ninguna cuenta registrada en el Banco";
+				request.setAttribute("MensajeTransferencias", mensaje);	
+				RequestDispatcher rd = request.getRequestDispatcher(DirTransferencia);   
+		        rd.forward(request, response);
+		        return;
+			}
+			
 			
 			
 			if(error != 1)
 			{
 				c = cuentasNeg.obtenerCuenta(cuentaorigen);
 				usuarioorigen = c.getUsuario().getIdUsuario();
-				usuariodestino = c.getUsuario().getIdUsuario();
+				usuariodestino = c2.getUsuario().getIdUsuario();
+				cuentadestino = c2.getNroDeCuenta();
 				
-				if(importe <= c.getSaldo() )
+				
+				if(importe > c.getSaldo())
+				 {
+					mensaje = "No se pudo realizar la transferencia, no posee Saldo Disponible en su cuenta Origen";
+					request.setAttribute("MensajeTransferencias", mensaje);	
+					RequestDispatcher rd = request.getRequestDispatcher(DirTransferencia);   
+			        rd.forward(request, response);
+			        return;
+				 
+				 }
+				
+				if(request.getParameter("Transferencia").toString().equals("2")==true && c2.getUsuario().getIdUsuario() == c.getUsuario().getIdUsuario())
+				{ 
+					mensaje = "No se pudo realizar la transferencia, el CBU destino debe pertenecer a una cuenta de Terceros";
+					request.setAttribute("MensajeTransferencias", mensaje );	
+					RequestDispatcher rd = request.getRequestDispatcher(DirTransferencia);   
+			        rd.forward(request, response);
+			        return;
+				}	
+				
+				if(transferencia.Transferencias(importe, cuentaorigen, cuentadestino, usuarioorigen, usuariodestino, detalle,tipomovimiento)!= false)
 				{
-					filas= transferencia.Transferencias(importe, cuentaorigen, cuentadestino, usuarioorigen, usuariodestino, detalle,tipomovimiento);
-				
-					if(filas != false)
-					{
 						mensaje = "Transferencia Exitosa";
 						request.setAttribute("MensajeTransferencias", mensaje);	
 					
@@ -132,18 +178,14 @@ public class ServletTransferencias extends HttpServlet {
 						request.setAttribute("MensajeTransferencias", mensaje);	
 					}
 				
-				}else {
-					
-					mensaje = "No se pudo realizar la transferencia, no posee Saldo Disponible en su cuenta Origen";
-					request.setAttribute("MensajeTransferencias", mensaje);
-				}
+				
 		
 			}else {
 				 mensaje = "No se pudo realizar la transferencia, verificar los campos ingresados";
 				 request.setAttribute("MensajeTransferencias", mensaje);
 			}
 			
-			RequestDispatcher rd = request.getRequestDispatcher("/TransferenciasCCPropia.jsp");   
+			RequestDispatcher rd = request.getRequestDispatcher(DirTransferencia);   
 	        rd.forward(request, response);			
 		}
 	}

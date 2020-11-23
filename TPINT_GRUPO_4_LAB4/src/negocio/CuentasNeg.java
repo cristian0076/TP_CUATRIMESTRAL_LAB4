@@ -10,4 +10,5 @@ public interface CuentasNeg {
 	public boolean insertar(Cuentas cuenta);
 	public boolean modificar(Cuentas cuenta);
 	public Cuentas obtenerCuenta(int NroCuenta);
+	public Cuentas obtenerCuenta(String Cbu);
 }

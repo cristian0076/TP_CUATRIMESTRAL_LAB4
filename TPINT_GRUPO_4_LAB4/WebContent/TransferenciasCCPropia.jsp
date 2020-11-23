@@ -68,7 +68,7 @@
 <div class="footer-siempre-abajo" style="background-color:white">
 
 
-<form action="ServletTransferencias?CuentaPropia=1" method="post">
+<form action="ServletTransferencias?Transferencia=1" method="post">
 
 <div class="container mt-3">
   <h2>Transferir a Cuenta Propia</h2>

@@ -39,6 +39,12 @@ public class CuentasNegImpl implements CuentasNeg {
 		// TODO Auto-generated method stub
 		return Cdao.obtenerCuenta(NroCuenta);
 	}
+
+
+		@Override
+		public Cuentas obtenerCuenta(String Cbu) {
+			return Cdao.obtenerCuenta(Cbu);
+		}
 	
 	
 
