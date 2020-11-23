@@ -60,9 +60,8 @@ public class ServletLogin extends HttpServlet {
 			        rd.forward(request, response);
 			        return;
 				} else if (usuario.getTipoDeUsuario().getIdTipoDeUsuario() != 2) {
-					RequestDispatcher rd = request.getRequestDispatcher("/PrincipalCLI.jsp");
-			        rd.forward(request, response);
-			        return;
+					response.sendRedirect("ServletCuentasCliente?IdUsuario=1");
+					return;
 				}
 			} else {	
 

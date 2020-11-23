@@ -11,9 +11,9 @@ public class MovimientosNegImpl implements MovimientosNeg{
 	
 	@Override
 	public boolean Transferencias(float importe, int cuentaorigen, int cuentadestino, int usuarioorigen,
-			int usuariodestino, String detalle) {
+			int usuariodestino, String detalle,int tipomovimiento) {
 		
-		return movDao.Transferencias(importe, cuentaorigen, cuentadestino, usuarioorigen, usuariodestino, detalle);
+		return movDao.Transferencias(importe, cuentaorigen, cuentadestino, usuarioorigen, usuariodestino, detalle, tipomovimiento);
 	}
 
 }

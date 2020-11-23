@@ -1,16 +1,16 @@
 package datosImpl;
 
-import java.sql.CallableStatement;
-
 import datos.MovimientosDao;
+
 
 public class MovimientosDaoImpl implements MovimientosDao {
 	
 	private Conexion cn;
-
+		
+	
 	@Override
 	public boolean Transferencias(float importe, int cuentaorigen, int cuentadestino, int usuarioorigen, int usuariodestino,
-			String detalle) {
+			String detalle, int tipomovimiento) {
 		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -21,24 +21,18 @@ public class MovimientosDaoImpl implements MovimientosDao {
 		cn = new Conexion();
 		cn.Open();
 		
-		int sp_check = 0;
-		boolean filas= false;
+		boolean sp_check = false;
+		
+		String sp_transferencias = "call prMovTransferencias "+"("+importe+","+cuentaorigen+","+cuentadestino+",'"+usuarioorigen+"','"+usuariodestino+"','"+detalle+"',"+tipomovimiento+")";
+		
 		try {
 		
-		CallableStatement sp = cn.connection.prepareCall("{call prMovTransferencias(?,?,?,?,?,?)}");
-		sp.setFloat(1, importe);
-		sp.setInt(2, cuentaorigen);	
-		sp.setInt(3, cuentadestino);
-		sp.setInt(4, usuarioorigen);
-		sp.setInt(5, usuariodestino);
-		sp.setString(6, detalle);
-		
-		 sp_check = sp.executeUpdate();
-	
-		if( sp_check == 1)
+				
+		if(cn.execute(sp_transferencias)==true)
 		{
-			filas = true;
+			sp_check = true;
 		}
+	
 		
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -48,11 +42,6 @@ public class MovimientosDaoImpl implements MovimientosDao {
 			cn.close();
 		}
 		
-	
-		return filas;
+		return sp_check;
 	}
-
-
-	
-	
 }

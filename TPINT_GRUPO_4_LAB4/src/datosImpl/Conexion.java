@@ -21,6 +21,7 @@ public class Conexion {
 		{
 			Class.forName("com.mysql.jdbc.Driver");
 			this.connection = DriverManager.getConnection(host+dbName, user, pass);
+			this.connection.setAutoCommit(false);
 		}
 		catch(Exception e)
 		{
@@ -49,15 +50,24 @@ public class Conexion {
 	public boolean execute(String query)
 	{
 		Statement st;
-		boolean save = true;
+		boolean save = false;
 		try {
 			st = connection.createStatement();
-		    st.executeUpdate(query);
+			if(st.executeUpdate(query)>0)
+			{
+				connection.commit();
+				save = true;
+			}
+		
 		}
 		catch(SQLException e)
 		{
-			save = false;
 			e.printStackTrace();
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 		}
 		return save;
 	}

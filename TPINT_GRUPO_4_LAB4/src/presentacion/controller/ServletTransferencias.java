@@ -71,6 +71,7 @@ public class ServletTransferencias extends HttpServlet {
 			int cuentadestino= 0;
 			int usuarioorigen= 0;
 			int usuariodestino= 0;
+			int tipomovimiento= 4;
 			String detalle = null;
 			Cuentas c = new Cuentas();
 			CuentasNegImpl cuentasNeg= new CuentasNegImpl();
@@ -119,7 +120,7 @@ public class ServletTransferencias extends HttpServlet {
 				
 				if(importe <= c.getSaldo() )
 				{
-					filas= transferencia.Transferencias(importe, cuentaorigen, cuentadestino, usuarioorigen, usuariodestino, detalle);
+					filas= transferencia.Transferencias(importe, cuentaorigen, cuentadestino, usuarioorigen, usuariodestino, detalle,tipomovimiento);
 				
 					if(filas != false)
 					{

@@ -22,9 +22,6 @@
        <a class="navbar-brand" style="color: white" href="#">Home Bank</a>
        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
           <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-              <li class="nav-item active">
-                    <a class="nav-link" href="PrincipalCLI.jsp" style="color:white">Inicio <span class="sr-only">(current)</span></a>
-              </li>
 
       	     <li class="nav-item active">
                    <a class="nav-link" href="ServletCuentasCliente?IdUsuario=1" style="color:white">Cuentas <span class="sr-only">(current)</span></a>

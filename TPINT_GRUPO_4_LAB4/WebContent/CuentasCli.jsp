@@ -25,10 +25,6 @@
        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
           <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
               <li class="nav-item active">
-                    <a class="nav-link" href="PrincipalCLI.jsp" style="color:white">Inicio <span class="sr-only">(current)</span></a>
-              </li>
-
-      	     <li class="nav-item active">
                    <a class="nav-link" href="ServletCuentasCliente?IdUsuario=1" style="color:white">Cuentas <span class="sr-only">(current)</span></a>
              </li>
 
@@ -51,6 +47,7 @@
          	   System.out.println(u.getApellido()); %>
          	   <%if(u.getApellido() != null){ %>
       		 <label><%=u.getNombre()+" "+u.getApellido() %></label>
+      		 
       		 <%} %>
       		 
             <a href="DatosPersonales.jsp">
