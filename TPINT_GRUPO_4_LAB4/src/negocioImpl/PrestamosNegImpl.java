@@ -1,5 +1,7 @@
 package negocioImpl;
 
+import java.util.List;
+
 import datos.PrestamosDao;
 import datosImpl.PrestamosDaoImpl;
 import entidad.Prestamos;
@@ -26,6 +28,13 @@ public class PrestamosNegImpl implements PrestamosNeg {
 	@Override
 	public boolean insertar(Prestamos p) {
 		return PrestamosDao.insertar(p);
+	}
+
+
+
+	@Override
+	public List<Prestamos> ListarPrestamosxUsuario(int id) {
+		return PrestamosDao.ListarPrestamosxUsuario(id);
 	}
 
 }

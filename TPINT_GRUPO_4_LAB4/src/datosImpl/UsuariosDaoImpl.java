@@ -61,8 +61,9 @@ public class UsuariosDaoImpl implements UsuariosDao {
 				user.setNumeroDeTelefono(rs.getString("NumeroDeTelefono"));
 				user.setDireccion(rs.getString("Direccion"));
 				
-				list.add(user);
-				
+				if(user.getTipoDeUsuario().getIdTipoDeUsuario() != 2) {
+					list.add(user);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();			
@@ -347,7 +348,7 @@ public boolean cambiar_estado(int id) {
 		List<Usuarios> list = new ArrayList<Usuarios>();
 		try {
 			
-			ResultSet rs = cn.query("select IdUsuario,DNI,Cuil,Nombre,Apellido,FechaNacimiento,Email,NombreUsuario,Contraseña,U.IdGenero,ESTADO,NumeroDeTelefono,Direccion,G.DescripcionGenero from Usuarios As U inner join Generos As G ON G.IdGenero = U.IdGenero where NombreUsuario like '%"+Nombre+"%' and Email like '%"+Email+"%' and DNI like '%"+Dni+"%' and Cuil like '%"+Cuil+"%'");
+			ResultSet rs = cn.query("select IdUsuario,DNI,Cuil,Nombre,Apellido,FechaNacimiento,Email,NombreUsuario,Contraseña,U.IdGenero,ESTADO,NumeroDeTelefono,Direccion,G.DescripcionGenero,U.IdTipoDeUsuario from Usuarios As U inner join Generos As G ON G.IdGenero = U.IdGenero where NombreUsuario like '%"+Nombre+"%' and Email like '%"+Email+"%' and DNI like '%"+Dni+"%' and Cuil like '%"+Cuil+"%'");
 			while(rs.next())
 			{
 				Usuarios user = new Usuarios();
@@ -367,13 +368,14 @@ public boolean cambiar_estado(int id) {
 				gen.setDescripcionGenero(rs.getString(14));
 				user.setGenero(gen);
 				user.setEstado(rs.getBoolean("ESTADO"));
-				TipoU.setIdTipoDeUsuario(rs.getInt(12));
+				TipoU.setIdTipoDeUsuario(rs.getInt(15));
 				user.setTipoDeUsuario(TipoU);
 				user.setNumeroDeTelefono(rs.getString("NumeroDeTelefono"));
 				user.setDireccion(rs.getString("Direccion"));
 				
-				list.add(user);
-				
+				if(user.getTipoDeUsuario().getIdTipoDeUsuario() != 2) {
+					list.add(user);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();			

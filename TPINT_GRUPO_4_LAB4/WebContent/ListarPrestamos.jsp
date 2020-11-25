@@ -1,3 +1,7 @@
+<%@page import = "entidad.Prestamos" %>
+<%@page import = "entidad.Usuarios" %>
+<%@page import="java.util.ArrayList" %>
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -12,8 +16,21 @@
    <style type="text/css">
   	<jsp:include page="/Estilos/PrincipalADM.css"></jsp:include>
   </style>
+  
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+  
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+
+
+ <script type="text/javascript">
+ $(document).ready( function () {
+ $('#table_id').DataTable();
+ } );
+ </script>
+  
 </head>
 <body>
+
 <nav class="navbar navbar-expand-lg navbar-light  bg-dark text-white-50">
        <a class="navbar-brand" style="color: white" href="#">Home Bank</a>
        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
@@ -31,16 +48,22 @@
           		Prestamos
         		</a>
         		<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          		<a class="dropdown-item" href="ListarPrestamos.jsp">Mis Prestamos</a>
-         		 <a class="dropdown-item" href="SolicitarPrestamo.jsp">Solicitar Prestamo</a>
+          		<a class="dropdown-item" href="ServletPrestamoCLI?Param=2">Mis Prestamos</a>
+         		 <a class="dropdown-item" href="ServletPrestamoCLI?Param=1">Solicitar Prestamo</a>
         		</div>
       		  </li>
 
           </ul>
        </div>
-  
+       
+     
+   			<%! Usuarios u = new Usuarios(); %>
        <span id="perfil" class="navbar-text" style="padding: 10px">
-       		<label id="Usuario">Usuario Activo</label>
+       			<%u= (Usuarios)request.getSession().getAttribute("Session_user");
+         	   System.out.println(u.getApellido()); %>
+         	   <%if(u.getApellido() != null){ %>
+      		 <label><%=u.getNombre()+" "+u.getApellido() %></label>
+      		 <%} %>
             <a href="DatosPersonales.jsp">
                 <img
                     src="https://i.ibb.co/Xzbf1pS/usuario.png" />
@@ -54,40 +77,59 @@
             </a>
            	Salir
         </span>
-    </nav> 
+    </nav>
+    
 <div class="container mt-3">
   <h2>Mis Préstamos</h2>
-  <p>Aqui podrá visualizar sus préstamos aprobados y seleccionar la cantidad de cuotas que desea abonar.</p>  
-  <input class="form-control" id="myInput" type="text" placeholder="">
+  
   <br>
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-       <th>Importe solicitado</th>
-        <th>Fecha</th>  
-        <th>Cantidad de cuotas</th> 
-        <th>Motivo del préstamo.</th>
-        <th>Próximo vencimiento</th>
-      </tr>
-    </thead>
-    <tbody id="myTable">
-      <tr>
-        <td>50.000</td>
-        <td>05/02/2020</td>
-        <td>24</td>
-        <td>Refacción de inmueble</td>
-        <td>05/11/2020</td>
-      </tr>
-      <tr>
-        <td>30.000</td>
-        <td>10/06/2019</td>
-        <td>24</td>
-        <td>Viajes y Turismo</td>
-        <td>05/11/2020</td>
-      </tr>
-    </tbody>
-  </table> 
-  <a href="SolicitarPrestamo.jsp"><button type="button" class="btn btn-secondary" href="SolicitarPrestamo.jsp">Solicitar Nuevo Prestamo</button></a>
+  <table id="table_id" class="table table-dark" style="overflow:auto; ">
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">Nro Prestamo</th>
+      <th scope="col">Fecha</th>
+      <th scope="col">Importe solicitado</th>
+      <th scope="col">Importe a pagar</th>
+      <th scope="col">Cantidad de cuotas</th>
+      <th scope="col">Estado</th>
+    </tr>
+  </thead>
+  <tbody>
+  
+  <% 
+	ArrayList<Prestamos> ListaPrestamos = null;
+  
+	if(request.getAttribute("AllPrestamos")!=null)
+	{
+		ListaPrestamos = (ArrayList<Prestamos>)request.getAttribute("AllPrestamos");
+	}		
+  %>
+	
+	<%  if(ListaPrestamos!=null)
+		for(Prestamos p : ListaPrestamos) 
+		{
+	%>
+	
+    <tr style="color:black">
+
+      <form  method="post" action="ServletPrestamoCLI?Param=3">
+      <td><input   class="btn btn-primary" type="submit" name= "btnVerCuotas" Onclick="abrir()"  value="Cuotas" ></td>
+      <th scope="row"><%=p.getIdPrestamo()%> <input type="hidden" name="idUsuario" value="<%=p.getIdPrestamo() %>" ></th>
+      <td style="text-align: center"><%=p.getFecha()%></td>
+      <td style="text-align: center"><%=p.getImporteSolicitado()%></td>
+      <td style="text-align: center" ><%=p.getImporteConIntereses()%></td>
+      <td style="text-align: center" ><%=p.getPlazoDePago()%></td>
+      <td style="text-align: center" ><%=p.getEstadoPrestamo().getDescripcion()%></td>
+      </form>
+      
+    </tr>
+   <%  } %>
+  </tbody>
+</table>
+  
+  
+  <a href="ServletPrestamoCLI?Param=1"><button type="button" class="btn btn-secondary" href="ServletPrestamoCLI?Param=2">Solicitar Nuevo Prestamo</button></a>
   <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#myModal">
   	Pagar cuotas
   </button>

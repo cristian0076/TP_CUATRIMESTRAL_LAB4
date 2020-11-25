@@ -32,22 +32,42 @@ public class ServletPrestamoCLI extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		ArrayList<Cuentas> listaC=new ArrayList<Cuentas>();
-		CuentasNegImpl negocio = new CuentasNegImpl();
+		//Cargar cuentas en solicitar prestamo select
+		if(request.getParameter("Param")!=null) {
+		int parametro = Integer.parseInt(request.getParameter("Param"));
 		Usuarios u = new Usuarios();
 		u= (Usuarios)request.getSession().getAttribute("Session_user");
-		listaC = (ArrayList<Cuentas>)negocio.ObtenerCuentas(u.getIdUsuario());
+			if(parametro == 1) {
+				//Cargar cuentas en solicitar prestamo select
+				ArrayList<Cuentas> listaC=new ArrayList<Cuentas>();
+				CuentasNegImpl negocio = new CuentasNegImpl();
+				listaC = (ArrayList<Cuentas>)negocio.ObtenerCuentas(u.getIdUsuario());
+				request.setAttribute("listaC", listaC);
+				RequestDispatcher rd = request.getRequestDispatcher("/SolicitarPrestamo.jsp");   
+		        rd.forward(request, response);
+			}
 		
-		request.setAttribute("listaC", listaC);
-
-	
-		RequestDispatcher rd = request.getRequestDispatcher("/SolicitarPrestamo.jsp");   
-        rd.forward(request, response);
+			if(parametro == 2) {
+				//Cargar tabla en ListarPrestamos
+				ArrayList<Prestamos> ListaPrestamos = new ArrayList <Prestamos>();
+				PrestamosNegImpl negocioPrestamos = new PrestamosNegImpl();
+				ListaPrestamos =  (ArrayList<Prestamos>) negocioPrestamos.ListarPrestamosxUsuario(u.getIdUsuario());
+				request.setAttribute("AllPrestamos", ListaPrestamos);
+				RequestDispatcher rd = request.getRequestDispatcher("/ListarPrestamos.jsp");   
+		        rd.forward(request, response);
+			}
+		}
+		
 	}
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		int parametro = 0;
+		if(request.getParameter("Param")!=null) {
+			parametro = Integer.parseInt(request.getParameter("Param"));
+		}
+		if(parametro == 3) {}
+		else {
 		ArrayList<Cuentas> listaC=new ArrayList<Cuentas>();
 		CuentasNegImpl negocio = new CuentasNegImpl();
 		Usuarios u = new Usuarios();
@@ -134,6 +154,7 @@ public class ServletPrestamoCLI extends HttpServlet {
 		
 		RequestDispatcher rd = request.getRequestDispatcher("/SolicitarPrestamo.jsp");   
         rd.forward(request, response);
+		}
 	}
 	
 	public float calcular_cuota (int interes, long monto) {

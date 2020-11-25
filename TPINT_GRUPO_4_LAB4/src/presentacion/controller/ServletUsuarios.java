@@ -74,7 +74,7 @@ if(request.getParameter("btnAgregar")!=null) {
 			if(request.getParameter("txtCUILA").toString() != null && request.getParameter("txtCUILA").toString() != "") {
 				user.setCuil(request.getParameter("txtCUILA").toString());
 				
-				if(user.getCuil().length() > 11 ) {
+				if(user.getCuil().length() > 12 ) {
 					error = 1;
 					String texto;
 					texto = "El tamaño del cuil supera la cifra maxima.";
