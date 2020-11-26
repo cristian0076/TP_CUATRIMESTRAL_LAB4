@@ -82,6 +82,9 @@
 
     <h1 style="text-align: center; padding-top: 50px;" class="font-italic text">Administración de clientes</h1><br>
      			
+     			
+     			<!-- Avisos para Agregar -->
+     			
      			<%!int filas = 2; %>
      			
      			         <%! String texto; %>
@@ -102,10 +105,10 @@
                     
                     <%if(filas == 1)
                     { %>
-                    	<h1 id="1" style="text-align: center; color:green; padding-top: 50px;" class="font-italic text">Usuario agregado con exito.</h1>
+                    	<h1 id="1" style="text-align: center; color:green; padding-top: 50px;" class="font-italic text">Cliente agregado con exito.</h1>
                     	<%filas = 2; %>
                   <%} else{ if(filas == 0){%>
-                  		<h3 id="1" style="text-align: center; color:red; padding-top: 50px;" class="font-italic text"><%= "Error al agregar usuario."+" "+texto %></h3>
+                  		<h3 id="1" style="text-align: center; color:red; padding-top: 50px;" class="font-italic text"><%= "Error al agregar cliente."+" "+texto %></h3>
                   		 <script>alert(<%=texto%>)</script> 
                   		 <%filas = 2; %>
                   <%}} %>
@@ -115,6 +118,44 @@
                   	<h1 id="1" style="text-align: center; color:red; padding-top: 50px;" class="font-italic text"></h1>
                   <%}%>
                   
+                  
+          <!-- Avisos para modificar -->
+                  
+                  
+                  	<%!int filas2 = 2; %>
+     			
+     			         <%! String texto2; %>
+                  		 
+                  		 <% 
+                  		 if(request.getAttribute("Error2")!= null){
+                  			texto2 = request.getAttribute("Error2").toString(); 
+                  		 }
+                  		 %>
+                    
+                    <%
+                	if(request.getAttribute("Editar")!=null)
+                	{
+                		filas2 = Integer.parseInt(request.getAttribute("Editar").toString());
+                }else{%>
+                    <h1 class="modal-title" id="staticBackdropLabel3" style="color:green;"></h1>
+                <%}%>
+                    
+                    <%if(filas2 == 1)
+                    { %>
+                    	<h1 id="1" style="text-align: center; color:green; padding-top: 50px;" class="font-italic text">Cliente modificado con exito.</h1>
+                    	<%filas2 = 2; %>
+                  <%} else{ if(filas2 == 0){%>
+                  		<h3 id="1" style="text-align: center; color:red; padding-top: 50px;" class="font-italic text"><%= "Error al modificar cliente."+" "+texto2 %></h3>
+                  		 <script>alert(<%=texto2%>)</script> 
+                  		 <%filas2 = 2; %>
+                  <%}} %>
+                  
+                  <% if(filas2 == 2){ %>
+
+                  	<h1 id="1" style="text-align: center; color:red; padding-top: 50px;" class="font-italic text"></h1>
+                  <%}%>
+                  
+
                   
                   <%
                   	if(request.getAttribute("delete")!=null){%>
@@ -272,8 +313,8 @@
                          <h5>Contraseña</h5>
                         <input type="password"  value =<%=u.getContraseña() %>   class="form-control" name="CLAVEM" Style="margin: 5px;" required="required" placeholder="Contraseña">
                         <h5>Genero</h5>
-                        <select  name="GENEROM" class="form-control">
-                        	<option selected="true" disabled="disabled">seleccionar</option>
+                        <select value=1 name="GENEROM" required="required" class="form-control">
+                        	<option value=0 selected="true" disabled="disabled">seleccionar</option>
                             <option value=2 >Femenino</option>
                             <option value=1 >Masculino</option>
                             <option value=3 >Sin definir</option>

@@ -1,24 +1,27 @@
 package entidad;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 public class Prestamos {
 
 	private int IdPrestamo;
-	private Timestamp Fecha;
+	private Date Fecha;
 	private float ImporteConIntereses;
 	private float ImporteSolicitado;
 	private int PlazoDePago;
 	private float ValorCuotaMensual;
-	private int CantidadDeCuotas;
 	private Usuarios Usuario;
 	private EstadosDePrestamo EstadoPrestamo;
+	private Cuentas Cuenta;
 	
 	public Prestamos()
 	{
 		
 	}
 	
+	
+
 	public Prestamos(int IdPrestamo, Timestamp Fecha, float ImporteConIntereses, float ImporteSolicitado, int PlazoDePago, float ValorCuotaMensual,int CantidadDeCuotas,Usuarios Usuario,EstadosDePrestamo EstadoPrestamo)
 	{
 		this.IdPrestamo= IdPrestamo;
@@ -27,17 +30,28 @@ public class Prestamos {
 		this.ImporteSolicitado = ImporteSolicitado;
 		this.PlazoDePago = PlazoDePago;
 		this.ValorCuotaMensual= ValorCuotaMensual;
-		this.CantidadDeCuotas= CantidadDeCuotas;
 		this.Usuario = Usuario;
 		this.EstadoPrestamo= EstadoPrestamo;
 	}
 
+	
+
+	public Cuentas getCuenta() {
+		return Cuenta;
+	}
+
+
+	public void setCuenta(Cuentas cuenta) {
+		Cuenta = cuenta;
+	}
+
+	
 
 	public int getIdPrestamo() {
 		return IdPrestamo;
 	}
 
-	public Timestamp getFecha() {
+	public Date getFecha() {
 		return Fecha;
 	}
 
@@ -57,15 +71,13 @@ public class Prestamos {
 		return ValorCuotaMensual;
 	}
 
-	public int getCantidadDeCuotas() {
-		return CantidadDeCuotas;
-	}
+	
 
 	public void setIdPrestamo(int idPrestamo) {
 		IdPrestamo = idPrestamo;
 	}
 
-	public void setFecha(Timestamp fecha) {
+	public void setFecha(Date fecha) {
 		Fecha = fecha;
 	}
 
@@ -83,10 +95,6 @@ public class Prestamos {
 
 	public void setValorCuotaMensual(float valorCuotaMensual) {
 		ValorCuotaMensual = valorCuotaMensual;
-	}
-
-	public void setCantidadDeCuotas(int cantidadDeCuotas) {
-		CantidadDeCuotas = cantidadDeCuotas;
 	}
 	
 
@@ -117,7 +125,7 @@ public class Prestamos {
 	public String toString() {
 		return "Prestamos [IdPrestamo=" + IdPrestamo + ", Fecha=" + Fecha + ", ImporteConIntereses="
 				+ ImporteConIntereses + ", ImporteSolicitado=" + ImporteSolicitado + ", PlazoDePago=" + PlazoDePago
-				+ ", ValorCuotaMensual=" + ValorCuotaMensual + ", CantidadDeCuotas=" + CantidadDeCuotas + "]";
+				+ ", ValorCuotaMensual=" + ValorCuotaMensual + "]";
 	}
 	
 }

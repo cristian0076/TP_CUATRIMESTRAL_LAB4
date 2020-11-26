@@ -24,7 +24,9 @@
        <a class="navbar-brand" style="color: white" href="#">Home Bank</a>
        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
           <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-              <li class="nav-item active">
+ 
+
+      	     <li class="nav-item active">
                    <a class="nav-link" href="ServletCuentasCliente?IdUsuario=1" style="color:white">Cuentas <span class="sr-only">(current)</span></a>
              </li>
 
@@ -33,8 +35,8 @@
           		Prestamos
         		</a>
         		<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          		<a class="dropdown-item" href="ListarPrestamos.jsp">Mis Prestamos</a>
-         		 <a class="dropdown-item" href="SolicitarPrestamo.jsp">Solicitar Prestamo</a>
+          		<a class="dropdown-item" href="ServletPrestamoCLI?Param=2">Mis Prestamos</a>
+         		 <a class="dropdown-item" href="ServletPrestamoCLI?Param=1">Solicitar Prestamo</a>
         		</div>
       		  </li>
 

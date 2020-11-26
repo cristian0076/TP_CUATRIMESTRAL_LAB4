@@ -74,7 +74,7 @@ if(request.getParameter("btnAgregar")!=null) {
 			if(request.getParameter("txtCUILA").toString() != null && request.getParameter("txtCUILA").toString() != "") {
 				user.setCuil(request.getParameter("txtCUILA").toString());
 				
-				if(user.getCuil().length() > 11 ) {
+				if(user.getCuil().length() > 12 ) {
 					error = 1;
 					String texto;
 					texto = "El tamaño del cuil supera la cifra maxima.";
@@ -355,11 +355,25 @@ if(request.getParameter("btnAgregar")!=null) {
 			}
 			
 			Generos g = new Generos();
+			try {
+				
 			
-			if(request.getParameter("GENEROM").toString() != null && request.getParameter("GENEROM").toString() != "") {
+			if(request.getParameter("GENEROM") != null) {
 				g.setIdGenero(Integer.parseInt(request.getParameter("GENEROM")));
 				user.setGenero(g);
 			}else {
+				if(request.getSession().getAttribute("UserMod")!= null) {
+					Usuarios u = new Usuarios();
+					u = (Usuarios)request.getSession().getAttribute("UserMod");
+					g.setIdGenero(u.getGenero().getIdGenero());
+					user.setGenero(g);
+				}else {
+					error = 1;
+				}
+				
+			}
+			
+			} catch (Exception e) {
 				error = 1;
 			}
 			

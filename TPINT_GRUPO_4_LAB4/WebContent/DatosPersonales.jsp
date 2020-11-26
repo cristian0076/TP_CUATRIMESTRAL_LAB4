@@ -1,3 +1,6 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="entidad.Cuentas"%>
+<%@page import="entidad.Usuarios"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -16,13 +19,16 @@
 </head>
 <body>
 
+
+
 <nav class="navbar navbar-expand-lg navbar-light  bg-dark text-white-50">
        <a class="navbar-brand" style="color: white" href="#">Home Bank</a>
        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
           <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+ 
 
       	     <li class="nav-item active">
-                   <a class="nav-link" href="CuentasCli.jsp" style="color:white">Cuentas <span class="sr-only">(current)</span></a>
+                   <a class="nav-link" href="ServletCuentasCliente?IdUsuario=1" style="color:white">Cuentas <span class="sr-only">(current)</span></a>
              </li>
 
               <li class="nav-item dropdown">
@@ -30,16 +36,23 @@
           		Prestamos
         		</a>
         		<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          		<a class="dropdown-item" href="ListarPrestamos.jsp">Mis Prestamos</a>
-         		 <a class="dropdown-item" href="SolicitarPrestamo.jsp">Solicitar Prestamo</a>
+          		<a class="dropdown-item" href="ServletPrestamoCLI?Param=2">Mis Prestamos</a>
+         		 <a class="dropdown-item" href="ServletPrestamoCLI?Param=1">Solicitar Prestamo</a>
         		</div>
       		  </li>
 
           </ul>
        </div>
   
+   			<%! Usuarios u = new Usuarios(); %>
        <span id="perfil" class="navbar-text" style="padding: 10px">
-            <label id="Usuario">Usuario Activo</label>
+       			<%u= (Usuarios)request.getSession().getAttribute("Session_user");
+         	   System.out.println(u.getApellido()); %>
+         	   <%if(u.getApellido() != null){ %>
+      		 <label><%=u.getNombre()+" "+u.getApellido() %></label>
+      		 
+      		 <%} %>
+      		 
             <a href="DatosPersonales.jsp">
                 <img
                     src="https://i.ibb.co/Xzbf1pS/usuario.png" />
