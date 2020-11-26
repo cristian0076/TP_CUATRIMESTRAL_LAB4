@@ -9,9 +9,11 @@ import java.util.Date;
 import java.util.List;
 
 import datos.PrestamosDao;
+import entidad.Cuentas;
 import entidad.EstadosDePrestamo;
 import entidad.Generos;
 import entidad.Prestamos;
+import entidad.TipoDeCuentas;
 import entidad.TiposDeUsuarios;
 import entidad.Usuarios;
 
@@ -117,4 +119,179 @@ public class PrestamosDaoImpl implements PrestamosDao {
 		return list;
 	}
 
+
+
+	public List<Prestamos> ObtenerPrestamos(int IdUsuario) {
+		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		List<Prestamos> list =new ArrayList<Prestamos>();
+		cn= new Conexion();
+		cn.Open();
+		
+
+		try {
+			System.out.println("INICIO DE TODO PROCESO PRESTAMOSDAOIMPL:  " + IdUsuario);
+
+			
+			
+			ResultSet rs = cn.query("SELECT u.IdUsuario,p.idUsuario, p.IdPrestamo, u.Apellido,c.NroDeCuenta,edp.IdEstado ,c.IdTipoDeCuenta,tdc.Descripcion,c.CBU, u.Cuil,p.Fecha, p.ImporteConIntereses,p.ImporteSolicitado, p.PlazoDePago, p.ValorCuotaMensual, edp.Descripcion FROM prestamos p RIGHT JOIN usuarios u ON u.IdUsuario = p.IdUsuario LEFT JOIN estadosdeprestamo edp ON p.IdEstado = edp.IdEstado LEFT JOIN Cuentas c ON c.IdUsuario = p.IdUsuario LEFT JOIN tiposdecuentas tdc ON tdc.IdTipoDeCuenta = c.IdTipoDeCuenta WHERE u.IdUsuario = "+ IdUsuario);
+			while(rs.next())
+			{
+				
+				Prestamos p = new Prestamos();
+				Cuentas c = new Cuentas();
+
+				TipoDeCuentas tc = new TipoDeCuentas();
+				Usuarios  u = new Usuarios();
+				TiposDeUsuarios tu = new TiposDeUsuarios();
+				Generos  g= new Generos();
+				EstadosDePrestamo ep = new EstadosDePrestamo();
+				
+				c.setNroDeCuenta(rs.getInt("c.NroDeCuenta"));
+				tc.setIdTipodeCuenta(rs.getInt("c.IdTipoDeCuenta"));
+				tc.setDescripcion(rs.getString("tdc.Descripcion"));
+				c.setCbu(rs.getString("c.CBU"));
+				u.setIdUsuario(rs.getInt("u.IdUsuario"));
+				u.setApellido(rs.getString("u.Apellido"));
+				u.setCuil(rs.getString("u.Cuil"));
+				
+				p.setIdPrestamo(rs.getInt("p.IdPrestamo"));
+				p.setFecha(rs.getDate("p.Fecha")) ;
+				p.setImporteConIntereses(rs.getInt("p.ImporteConIntereses")) ;
+				p.setImporteSolicitado(rs.getInt("p.ImporteSolicitado")) ;
+				p.setPlazoDePago(rs.getInt("p.PlazoDePago")) ;
+				p.setValorCuotaMensual(rs.getInt("p.ValorCuotaMensual"));
+				ep.setIdEstado(rs.getInt("edp.IdEstado"));
+				ep.setDescripcion(rs.getString("edp.Descripcion"));
+				
+				
+				p.setEstadoPrestamo(ep);
+				u.setGenero(g);
+				u.setTipoDeUsuario(tu);
+				c.setTipoDeCuenta(tc);
+				p.setUsuario(u);
+				
+				list.add(p);
+			}
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			cn.close();
+		}
+		
+		System.out.println("LISTA DE LOS PRESTAMOS POR USUARIOOO " + list);
+		
+		return list;
+	}
+
+	@Override
+	public Prestamos obtenerPrestamo(int idPrestamo) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		cn= new Conexion();
+		cn.Open();
+		
+		Prestamos p =new Prestamos();
+		try {
+			
+			ResultSet rs = cn.query("SELECT u.IdUsuario,p.idUsuario, p.IdPrestamo, u.Apellido,c.NroDeCuenta,edp.IdEstado ,c.IdTipoDeCuenta,tdc.Descripcion,c.CBU, u.Cuil,p.Fecha, p.ImporteConIntereses,p.ImporteSolicitado, p.PlazoDePago, p.ValorCuotaMensual, edp.Descripcion FROM prestamos p RIGHT JOIN usuarios u ON u.IdUsuario = p.IdUsuario LEFT JOIN estadosdeprestamo edp ON p.IdEstado = edp.IdEstado LEFT JOIN Cuentas c ON c.IdUsuario = p.IdUsuario LEFT JOIN tiposdecuentas tdc ON tdc.IdTipoDeCuenta = c.IdTipoDeCuenta WHERE p.IdPrestamo = "+ idPrestamo);
+			while(rs.next())
+			{
+				
+				Cuentas c = new Cuentas();
+
+				TipoDeCuentas tc = new TipoDeCuentas();
+				Usuarios  u = new Usuarios();
+				TiposDeUsuarios tu = new TiposDeUsuarios();
+				Generos  g= new Generos();
+				EstadosDePrestamo ep = new EstadosDePrestamo();
+				
+				c.setNroDeCuenta(rs.getInt("c.NroDeCuenta"));
+				tc.setIdTipodeCuenta(rs.getInt("c.IdTipoDeCuenta"));
+				tc.setDescripcion(rs.getString("tdc.Descripcion"));
+				c.setCbu(rs.getString("c.CBU"));
+				u.setIdUsuario(rs.getInt("u.IdUsuario"));
+				u.setApellido(rs.getString("u.Apellido"));
+				u.setCuil(rs.getString("u.Cuil"));
+				
+				p.setIdPrestamo(rs.getInt("p.IdPrestamo"));
+				p.setFecha(rs.getDate("p.Fecha")) ;
+				p.setImporteConIntereses(rs.getInt("p.ImporteConIntereses")) ;
+				p.setImporteSolicitado(rs.getInt("p.ImporteSolicitado")) ;
+				p.setPlazoDePago(rs.getInt("p.PlazoDePago")) ;
+				p.setValorCuotaMensual(rs.getInt("p.ValorCuotaMensual"));
+				ep.setIdEstado(rs.getInt("edp.IdEstado"));
+				ep.setDescripcion(rs.getString("edp.Descripcion"));
+				
+				
+				p.setEstadoPrestamo(ep);
+				u.setGenero(g);
+				u.setTipoDeUsuario(tu);
+				c.setTipoDeCuenta(tc);
+				p.setUsuario(u);
+				
+				
+			}
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			cn.close();
+		}
+		
+		
+		return p;
+	}
+
+	@Override
+	public boolean modificar(Prestamos prestamo) {
+
+		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		boolean estado= true;
+		
+		cn= new Conexion();
+		cn.Open();
+		System.out.println("INICIO prestamo.getEstadoPrestamo().getIdEstado()  " + prestamo.getEstadoPrestamo().getIdEstado());
+		System.out.println("INICIO prestamo.getIdPrestamo():  " + prestamo.getIdPrestamo());
+		String query= "UPDATE `tp_banco`.`prestamos` SET `IdEstado` = '"+ prestamo.getEstadoPrestamo().getIdEstado()+"' WHERE IdPrestamo =" + prestamo.getIdPrestamo();
+		try {
+			estado= cn.execute(query);
+			
+			System.out.println("INICIO DE estado:  " + estado);
+
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			cn.close();
+		}
+		return estado;	
+	}
+	
 }

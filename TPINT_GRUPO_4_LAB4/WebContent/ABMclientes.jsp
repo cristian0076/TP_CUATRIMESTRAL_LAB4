@@ -56,6 +56,7 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" href="ABMclientes.jsp">ABM Clientes</a>
           <a class="dropdown-item" href="ABMCuentas.jsp">Apertura de cuentas</a>
+          <a class="dropdown-item" href="AutorizarPrestamos.jsp">Autorizar Prestamos</a>
         </div>
       </li>
       <li class="nav-item active">

@@ -58,7 +58,31 @@ INSERT INTO `tp_banco`.`movimientos` (`IdMovimiento`,`IdUsuario`, `Fecha`, `Deta
 END //
 DELIMITER ;
 DELIMITER //
+DELIMITER $$
+CREATE TRIGGER trigger_CreateMovementAndRowOfFees
+    AFTER UPDATE
+    ON prestamos FOR EACH ROW 
+BEGIN
+  declare NroCuota INT default 0;
+ IF (NEW.IdEstado = 2) THEN
+  SET NroCuota = 1;
+  WHILE NroCuota <= NEW.PlazoDePago DO
 
+	INSERT INTO `tp_banco`.`prestamoporcuota` (`IdPrestamo`, `NroCuota`,`FechaPago`, `Estado`) 
+	VALUES (NEW.IdPrestamo, NroCuota, (select DATE_ADD(NOW(),INTERVAL NroCuota MONTH)), 0 );
+
+    SET NroCuota = NroCuota + 1;
+  END WHILE;
+  
+ INSERT INTO `tp_banco`.`movimientos` (`IdMovimiento`,`IdUsuario`, `Fecha`, `Detalle`, `Importe`, `IdTipoMovimiento`,`NroDeCuenta`) 
+ VALUES (null,NEW.IdUsuario, (select NOW()), 'Alta de prestamo', NEW.ImporteSolicitado , '2', NEW.NroDeCuenta);
+
+   END IF;
+ 
+ 
+END$$    
+
+DELIMITER ;
 
 
 

@@ -1,6 +1,8 @@
 <%@page import="entidad.Usuarios"%>
 <%@page import="entidad.Cuentas"%>
 <%@page import="entidad.CuentasPorUsuario"%>
+<%@page import="entidad.Prestamos"%>
+<%@page import="entidad.PrestamosPorUsuario"%>
 <%@page import="java.util.ArrayList"%>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -12,7 +14,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
-<title>ABM Cuentas</title>
+<title>Autorizar Prestamos</title>
 
 <!--Bootstrap-->
 <link rel="stylesheet"
@@ -46,44 +48,56 @@
 
 <body>
 
-	<nav
+<nav
 		class="navbar navbar-expand-lg navbar-light  bg-dark text-white-50">
 
-	<a class="navbar-brand" style="color: white" href="#">Home Bank</a>
+		<a class="navbar-brand" style="color: white" href="#">Home Bank</a>
 
-	<div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-		<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-			<li class="nav-item active"><a class="nav-link"
-				href="PrincipalADM.jsp" style="color: white">Inicio <span
-					class="sr-only">(current)</span>
-			</a></li>
-			<li class="nav-item dropdown"><a
-				class="nav-link dropdown-toggle" style="color: white" href="#"
-				id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
-				aria-haspopup="true" aria-expanded="false"> Administrar clientes
-			</a>
-				<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-					<a class="dropdown-item" href="ABMclientes.jsp">ABM Clientes</a> <a
-						class="dropdown-item" href="ABMCuentas.jsp">Apertura de
-						cuentas</a>
-						<a class="dropdown-item" href="AutorizarPrestamos.jsp">Autorizar Prestamos</a>
-				</div></li>
-			<li class="nav-item active"><a class="nav-link"
-				href="Reportes.jsp" style="color: white">Reportes <span
-					class="sr-only">(current)</span></a></li>
-		</ul>
-	</div>
-	<span id="perfil" class="navbar-text" style="padding: 10px"> <a
-		href="DatosPersonalesADM.jsp"> <img
-			src="https://i.ibb.co/Xzbf1pS/usuario.png" />
-	</a> Perfil
-	</span> <span id="salir" class="navbar-text"> <a href="Login.jsp">
-			<img src="https://i.ibb.co/TcV6LW4/salir-arriba-a-la-derecha.png" />
-	</a> Salir
-	</span> </nav>
+
+		<div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+			<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+				<li class="nav-item active"><a class="nav-link"
+					href="PrincipalADM.jsp" style="color: white">Inicio <span
+						class="sr-only">(current)</span></a></li>
+				<li class="nav-item dropdown"><a
+					class="nav-link dropdown-toggle" style="color: white" href="#"
+					id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
+					aria-haspopup="true" aria-expanded="false"> Administrar
+						clientes </a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+						<a class="dropdown-item" href="ABMclientes.jsp">ABM Clientes</a> <a
+							class="dropdown-item" href="ABMCuentas.jsp">Apertura de cuentas</a>
+							<a
+							class="dropdown-item" href="AutorizarPrestamos.jsp">Autorizar Prestamos</a>
+					</div></li>
+				<li class="nav-item active"><a class="nav-link" href="Reportes.jsp"
+					style="color: white">Reportes <span class="sr-only">(current)</span></a>
+				</li>
+			</ul>
+		</div>
+		<%! Usuarios u = new Usuarios(); %>
+
+		<span id="perfil" class="navbar-text" style="padding: 10px">
+		<%
+			if(request.getSession().getAttribute("Session_user") != null){
+				u= (Usuarios)request.getSession().getAttribute("Session_user");
+         	   	System.out.println(u.getApellido()); 
+			}
+         	   %>
+         	   <%if(u.getApellido() != null){ %>
+      		 <label><%=u.getNombre()+" "+u.getApellido() %></label>
+      		 <%} %>
+		 <a
+			href="DatosPersonalesADM.jsp"> <img src="https://i.ibb.co/Xzbf1pS/usuario.png" />
+		</a> Perfil
+		</span> <span id="salir" class="navbar-text"> <a href="Login.jsp">
+				<img src="https://i.ibb.co/TcV6LW4/salir-arriba-a-la-derecha.png" />
+		</a> Salir
+		</span>
+	</nav>
 
 	<h1 style="text-align: center; padding-top: 30px;"
-		class="font-italic text">Administración de cuentas</h1>
+		class="font-italic text">Autorizar Prestamos</h1>
 
 	<h3 style="color: red">
 		<%
@@ -99,7 +113,7 @@
 
 	<div class="container">
 		<div class="footer-siempre-abajo" style="background-color: white">
-			<form method="post" action="ServletCuentas">
+			<form method="post" action="ServletPrestamoAdm">
 				<div class="row">
 					<div class="col-12" style="padding: 20px; text-align: center;">
 						<div class="input-group" style="text-align: center;">
@@ -132,7 +146,6 @@
 							<thead>
 								<tr>
 									<th scope="col"></th>
-									<th scope="col"></th>
 									<th scope="col">ID</th>
 									<th scope="col">Usuario</th>
 									<th scope="col">Nombre</th>
@@ -140,31 +153,28 @@
 									<th scope="col">Email</th>
 									<th scope="col">Dni</th>
 									<th scope="col">Cuil</th>
-									<th scope="col">Cant. Cuentas</th>
+									<th scope="col">Cant. Prestamos</th>
 								</tr>
 							</thead>
 							<tbody>
 
 								<%
-									ArrayList<CuentasPorUsuario> listaCu = null;
+									ArrayList<PrestamosPorUsuario> listaCu = null;
 									if (request.getAttribute("BusquedaCu") != null) {
-										listaCu = (ArrayList<CuentasPorUsuario>) request.getAttribute("BusquedaCu");
+										listaCu = (ArrayList<PrestamosPorUsuario>) request.getAttribute("BusquedaCu");
 									}
 								%>
 								<%
 									if (listaCu != null)
-										for (CuentasPorUsuario cu : listaCu) {
+										for (PrestamosPorUsuario cu : listaCu) {
+											if (cu.getCantidadPrestamos() > 0){
 								%>
 								<tr style="color: black">
-									<form method="post" action="ServletCuentas">
+									<form method="post" action="ServletPrestamoAdm">
 										<td><input HeaderText="Borrado" class="btn btn-primary"
 											type="submit" name="btnListar" Onclick="abrir()"
 											id="btnListar" value="Listar"></td>
-
-										<td><input class="btn btn-primary" type="submit"
-											name="btnModalAgregar" id="btnModalAgregar"
-											Onclick="Agregar()" value="Agregar"></td>
-
+											
 										<th scope="row"><%=cu.getUsuario().getIdUsuario()%> 
 											<input type="hidden" name="idUsuario" value="<%=cu.getUsuario().getIdUsuario()%>">
 										</th>
@@ -174,13 +184,14 @@
 										<td><%=cu.getUsuario().getEmail()%></td>
 										<td><%=cu.getUsuario().getDni()%></td>
 										<td><%=cu.getUsuario().getCuil()%></td>
-										<th scope="row" Style="text-align:center;"><%=cu.getCantidadCuentas()%> 
-											<input type="hidden" name="idUsuario" value="<%=cu.getCantidadCuentas()%>">
+										<th scope="row" Style="text-align:center;"><%=cu.getCantidadPrestamos()%> 
+											<input type="hidden" name="idUsuario" value="<%=cu.getUsuario().getIdUsuario()%>">
 										</th>
 									</form>
 								</tr>
 							</tbody>
 							<%
+											}
 								}
 							%>
 						</table>
@@ -195,7 +206,7 @@
 		tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
 		aria-hidden="true">
 		<div class="modal-dialog modal-lg">
-			<form method="post" action="ServletCuentas">
+			<form method="post" action="ServletPrestamoAdm">
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title" id="staticBackdropLabel2">Listar
@@ -210,12 +221,13 @@
 							<thead>
 								<tr>
 									<th scope="col"></th>
-									<th scope="col"></th>
 									<th scope="col">Id</th>
 									<th scope="col">Apellido</th>
-									<th scope="col">Cuil</th>
-									<th scope="col">Tipo Cuenta</th>
-									<th scope="col">Nro. Cuenta</th>
+									<th scope="col">Imp. Solicitado</th>
+									<th scope="col">Imp. Con Interes</th>
+									<th scope="col">Imp. Mensual</th>
+									<th scope="col">Estado Prestamo</th>
+									<th scope="col">Cant. Cuotas</th>
 								</tr>
 							</thead>
 
@@ -232,36 +244,34 @@
 							%>
 
 							<%
-								ArrayList<Cuentas> CuentasUsuario = null;
+								ArrayList<Prestamos> PrestamosUsuario = null;
 								if (request.getAttribute("listaC") != null) {
-									CuentasUsuario = (ArrayList<Cuentas>) request.getAttribute("listaC");
+									PrestamosUsuario = (ArrayList<Prestamos>) request.getAttribute("listaC");
 								}
 							%>
 
 
 							<%
-								if (CuentasUsuario != null) {
-									for (Cuentas c : CuentasUsuario) {
+								if (PrestamosUsuario != null) {
+									for (Prestamos c : PrestamosUsuario) {
 							%>
 							<tbody>
 								<tr>
-									<form method="post" action="ServletCuentas">
+									<form method="post" action="ServletPrestamoAdm">
 										<td><input HeaderText="Modificar" class="btn btn-primary"
 											type="submit" name="btnModalModificar"
 											Onclick="abrirModificar()" id="btnModalModificar"
-											value="Modificar"></td>
-
-										<td><input HeaderText="Eliminar" class="btn btn-primary"
-											type="submit" name="btnEliminar" Onclick="abrirEliminar()"
-											id="btnModalEliminar" value="Eliminar"></td>
+											value="Autorizar"></td>
 
 										<th scope="row"><%=c.getUsuario().getIdUsuario()%></th>
 										<td><%=c.getUsuario().getApellido()%></td>
-										<td><%=c.getUsuario().getCuil()%></td>
-										<td><%=c.getTipoDeCuenta().getDescripcion()%></td>
-										<th scope="row" Style="text-align:center;"><%=c.getNroDeCuenta()%> <input
-											type="hidden" name="idCuentaEdit"
-											value="<%=c.getNroDeCuenta()%>"></th>
+										<td><%=c.getImporteSolicitado()%></td>
+										<td><%=c.getImporteConIntereses()%></td>
+										<td><%=c.getValorCuotaMensual()%></td>
+										<td><%=c.getEstadoPrestamo().getDescripcion()%></td>
+										<th scope="row" Style="text-align:center;"><%=c.getPlazoDePago()%> <input
+											type="hidden" name="idPrestamoEdit"
+											value="<%=c.getIdPrestamo()%>"></th>
 									</form>
 								</tr>
 								<%
@@ -276,123 +286,38 @@
 		</div>
 	</div>
 
-
-	<div class="modal fade bd-example-modal-lg" id="modalAgregar"
-		tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-		aria-hidden="true">
-		<div class="modal-dialog modal-lg">
-			<form method="post" action="ServletCuentas">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="staticBackdropLabel3">Agregar
-							cuenta</h5>
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<%
-						Usuarios usuario = null;
-						if (request.getAttribute("usuarioCta") != null) {
-							usuario = (Usuarios) request.getAttribute("usuarioCta");
-							System.out.println(usuario.getDni());
-					%>
-
-					<div class="modal-body">
-						<div class="form-group">
-
-							<input type="hidden" ID="Id" class="form-control" name="txtId"
-								Style="margin: 5px;" value="<%=usuario.getIdUsuario()%>">
-
-							<h5>Nombre</h5>
-							<input type="text" ID="Nombre" class="form-control"
-								name="txtNombre" Style="margin: 5px;"
-								value="<%=usuario.getNombre()%>" disabled>
-
-							<h5>Apellido</h5>
-							<input type="text" ID="Apellido" class="form-control"
-								name="txtApellidoA" Style="margin: 5px;" placeholder="Apellido"
-								Value=<%=usuario.getApellido()%> disabled>
-
-							<h5>Dni</h5>
-							<input type="text" ID="DNI" class="form-control"
-								onkeypress="javascript:return solonumeros(event)" name="txtDni"
-								placeholder="Dni" value=<%=usuario.getDni()%>
-								Style="margin: 5px;" disabled>
-
-							<h5>Tipo De Caja</h5>
-							<select id="txtTipoCaja" name="txtTipoCaja" class="form-control"
-								required="required">
-								<option value="1">Caja de ahorro</option>
-								<option value="2">Cuenta corriente</option>
-							</select>
-						</div>
-
-						<%
-							}
-
-							if (request.getAttribute("usuarioCta") != null) {
-						%>
-
-						<script type="text/javascript">
-							
- 							$(function(){
-  								$('#modalAgregar').modal();
- 							});
- 							
-						</script>
-
-						<%
-							}
-						%>
-					</div>
-
-					<div class="modal-footer">
-						<input class="btn btn-primary col text-center" type="submit"
-							value="Agregar" name="btnAgregar">
-					</div>
-				</div>
-		</div>
-	</div>
-
-
 	<div class="modal fade bd-example-modal-lg" id="modalModificar"
 		tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
 		aria-hidden="true">
 		<div class="modal-dialog modal-lg">
-			<form method="post" action="ServletCuentas">
+			<form method="post" action="ServletPrestamoAdm">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="staticBackdropLabel3">Modificar
-							Cuenta</h5>
+						<h5 class="modal-title" id="staticBackdropLabel3">Autorizar
+							Prestamo</h5>
 						<button type="button" class="close" data-dismiss="modal"
 							aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
 					<%
-						Cuentas cuentaEdit = null;
-						if (request.getAttribute("usuarioCtaEdit") != null) {
-							cuentaEdit = (Cuentas) request.getAttribute("usuarioCtaEdit");
+						Prestamos prestamoEdit = null;
+						if (request.getAttribute("prestamoCtaEdit") != null) {
+							prestamoEdit = (Prestamos) request.getAttribute("prestamoCtaEdit");
 					%>
 
 					<div class="modal-body">
 						<div class="form-group">
 
 							<input type="hidden" ID="Id" class="form-control"
-								name="txtIdCtaEdit" Style="margin: 5px;"
-								value="<%=cuentaEdit.getNroDeCuenta()%>">
-
-							<h5>Saldo</h5>
-							<input type="text" ID="Nombre" class="form-control"
-								name="txtSaldo" Style="margin: 5px;"
-								value="<%=cuentaEdit.getSaldo()%>">
-
-							<h5>Tipo De Caja</h5>
-							<select id="txtTipoCaja" name="txtTipoCaja" class="form-control"
+								name="txtIdPrestamoEdit" Style="margin: 5px;"
+								value="<%=prestamoEdit.getIdPrestamo()%>">
+								
+							<h5>Estado de Prestamo</h5>
+							<select id="txtEstadoPrestamo" name="txtEstadoPrestamo" class="form-control"
 								required="required">
-								<option value="1">Caja de ahorro</option>
-								<option value="2">Cuenta corriente</option>
+								<option value="2">Confirmado</option>
+								<option value="3">Rechazado</option>
 							</select>
 
 						</div>
@@ -400,7 +325,7 @@
 						<%
 							}
 
-							if (request.getAttribute("usuarioCtaEdit") != null) {
+							if (request.getAttribute("prestamoCtaEdit") != null) {
 						%>
 
 						<script type="text/javascript">
@@ -423,37 +348,43 @@
 				</div>
 		</div>
 	</div>
-
-
-	<div class="modal fade bd-example-modal-sm" id="modalEliminar"
-		tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-		aria-hidden="true">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="staticBackdropLabel2">Eliminar
-						cliente</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<div class="form-group">¿Esta seguro de eliminar el cliente
-						seleccionado?</div>
-				</div>
-				<div class="modal-footer">
-					<form method="post" action="ServletUsuarios">
-						<input class="btn btn-primary col text-center" type="submit"
-							value="Confirmar" name="btnEliminarE">
-					</form>
-				</div>
-
-			</div>
-		</div>
-	</div>
-
-
+	<% String mensaje = null;
+	if(request.getAttribute("MensajeAutorizacion")!= null)
+	{
+		
+		mensaje = request.getAttribute("MensajeAutorizacion").toString();
+	
+	%>
+	    <script> 
+	    window.onload = function abrir() {
+	        $('#modalMensaje').modal('show');
+	    }
+	    </script>
+	<%
+	}else{
+	
+	 %>	
+	    
+	<%}
+	%>
+<div class="modal fade" id="modalMensaje" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Mensaje</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <%= mensaje %>
+      </div>
+      <div class="modal-footer">
+          <a href="AutorizarPrestamos.jsp" class="btn btn-secondary" >Close</a>
+       </div>
+    </div>
+  </div>
+</div>
 	<script>
 
         function solonumeros(e) {
@@ -477,17 +408,12 @@
             $('#modalListar').modal('show');
         }
         
-        function abrirAgregar() {
-            $('#modalAgregar').modal('show');
-        }
-        
+
         function abrirModificar() {
             $('#modalModificar').modal('show');
         }
         
-        function abrirEliminar() {
-            $('#modalEliminar').modal('show');
-        }
+
         
     </script>
 
