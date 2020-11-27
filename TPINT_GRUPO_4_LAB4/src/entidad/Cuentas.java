@@ -3,6 +3,8 @@ package entidad;
 import java.sql.Timestamp;
 import java.util.Date;
 
+import excepciones.SaldoNegativoException;
+
 public class Cuentas {
 
 	private int NroDeCuenta;
@@ -78,29 +80,45 @@ public class Cuentas {
 	public void setSaldo(float saldo) {
 		Saldo = saldo;
 	}
+
+	
 	public TipoDeCuentas getTipoDeCuenta() {
 		return TipoDeCuenta;
 	}
+
+	
 	public Usuarios getUsuario() {
 		return Usuario;
 	}
 
+	
 	public void setTipoDeCuenta(TipoDeCuentas tipoDeCuenta) {
 		TipoDeCuenta = tipoDeCuenta;
 	}
 
+	
 	public void setUsuario(Usuarios usuario) {
 		Usuario = usuario;
 	}	
 	
-	
-	
-	
-	
+
 	@Override
 	public String toString() {
 		return "Cuentas [IdTipoDeCuenta=" + TipoDeCuenta.getIdTipodeCuenta() +TipoDeCuenta.getDescripcion() + ", NroDeCuenta=" + NroDeCuenta + ", FechaCreacion="
 				+ FechaCreacion + ", Cbu=" + Cbu + ", Saldo=" + Saldo + "]";
 	}
 
+	
+	public static boolean validaSaldo(float saldo) throws SaldoNegativoException
+	{
+		if (saldo > 0 )
+		{
+			return true;	
+		}
+		else
+		{
+			SaldoNegativoException exc = new SaldoNegativoException();
+			throw exc;
+		}
+	}
 }

@@ -36,7 +36,10 @@ public class CuentasDaoImpl implements CuentasDao {
 		List<Cuentas> list =new ArrayList<Cuentas>();
 		try {
 			
-			ResultSet rs = cn.query("SELECT u.IdUsuario, u.Apellido ,u.Cuil, c.NroDeCuenta, c.IdTipoDeCuenta, tc.Descripcion, c.FechaCreacion, c.CBU, c.Saldo FROM cuentas c right join usuarios u ON u.IdUsuario = c.IdUsuario LEFT JOIN tiposdecuentas tc ON c.IdTipoDeCuenta = tc.IdTipoDeCuenta WHERE u.IdUsuario = "+ IdUsuario);
+			ResultSet rs = cn.query("SELECT u.IdUsuario, u.Apellido ,u.Cuil, c.NroDeCuenta, c.IdTipoDeCuenta, tc.Descripcion, c.FechaCreacion, "
+					+ "c.CBU, c.Saldo FROM cuentas c right join usuarios u ON u.IdUsuario = c.IdUsuario "
+					+ "LEFT JOIN tiposdecuentas tc ON c.IdTipoDeCuenta = tc.IdTipoDeCuenta "
+					+ "WHERE u.IdUsuario = "+ IdUsuario);
 			while(rs.next())
 			{
 				Cuentas c = new Cuentas();
@@ -140,7 +143,7 @@ public class CuentasDaoImpl implements CuentasDao {
 		}
 		return estado;	
 	}
-	
+
 	
 	public Cuentas obtenerCuenta(int NroCuenta) {
 		try {
@@ -195,6 +198,7 @@ public class CuentasDaoImpl implements CuentasDao {
 		return c;
 	}
 
+	
 	@Override
 	public Cuentas obtenerCuenta(String Cbu) {
 		try {
@@ -241,5 +245,36 @@ public class CuentasDaoImpl implements CuentasDao {
 			cn.close();
 		}
 		return c;
+	}
+
+
+	@Override
+	public boolean eliminar(int id) {
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		boolean estado= true;
+		
+		cn= new Conexion();
+		cn.Open();
+		
+		String query= "DELETE FROM cuentas WHERE NroDeCuenta=" + id;
+		try {
+			estado= cn.execute(query);
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		finally
+		{
+			cn.close();
+		}
+		return estado;	
 	}
 }

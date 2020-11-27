@@ -23,12 +23,9 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-	
-<style type="text/css">
- 	<jsp:include page="/Estilos/AMBclientes.css"></jsp:include>
- </style>
-	
+
 <!--Paginado-->
+
 <link rel="stylesheet" type="text/css"
 	href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
 
@@ -38,7 +35,7 @@
 
 <script type="text/javascript">
  	$(document).ready( function () {
- 		$('#tablaCuentas').DataTable();
+ 		$('#table_id').DataTable();
  	} );
  </script>
 
@@ -66,7 +63,6 @@
 					<a class="dropdown-item" href="ABMclientes.jsp">ABM Clientes</a> <a
 						class="dropdown-item" href="ABMCuentas.jsp">Apertura de
 						cuentas</a>
-						<a class="dropdown-item" href="AutorizarPrestamos.jsp">Autorizar Prestamos</a>
 				</div></li>
 			<li class="nav-item active"><a class="nav-link"
 				href="Reportes.jsp" style="color: white">Reportes <span
@@ -85,12 +81,14 @@
 	<h1 style="text-align: center; padding-top: 30px;"
 		class="font-italic text">Administración de cuentas</h1>
 
-	<h3 style="color: red">
+
+
+	<h3 style="color: red; text-align: center;">
 		<%
-			if (request.getAttribute("mensaje") != null) {
+			if (request.getAttribute("Error") != null) {
 		%>
 
-		<%=request.getAttribute("mensaje").toString()%>
+		<%=request.getAttribute("Error").toString()%>
 
 		<%
 			}
@@ -98,10 +96,10 @@
 	</h3>
 
 	<div class="container">
-		<div class="footer-siempre-abajo" style="background-color: white">
+		<div class="footer-siempre-abajo">
 			<form method="post" action="ServletCuentas">
 				<div class="row">
-					<div class="col-12" style="padding: 20px; text-align: center;">
+					<div class="col-12" style="padding: 0px; text-align: center;">
 						<div class="input-group" style="text-align: center;">
 							<input type="text" ID="txtNombre" class="form-control"
 								name="txtUsuario" Style="margin: 5px;" placeholder="Usuario">
@@ -117,76 +115,81 @@
 								onkeypress="javascript:return solonumeros(event)"
 								Style="margin: 5px; width: 100px;" placeholder="Cuil">
 						</div>
-						<div class="col text-center" style="padding:0;">
+						<br>
+						<div class="col text-center" style="padding: 0;">
 							<input class="btn btn-primary" name="btnBuscar" type="submit"
-								value="Buscar" CssClass="btn btn-primary mb-2" style="width:200px">
+								value="Buscar" CssClass="btn btn-primary mb-2"
+								style="width: 200px">
 						</div>
 					</div>
 				</div>
+			</form>
 
-				<div class="row" style="overflow: auto; height: 400px;">
+			<br>
+			<div class="row" style="overflow: auto; height: 400px;">
 
-					<div class="col-md-12 col-sm-4">
+				<div class="col-md-12 col-sm-4"
+					style="padding: 2px; text-align: center;">
 
-						<table id="tablaCuentas" class="table-dark">
-							<thead>
-								<tr>
-									<th scope="col"></th>
-									<th scope="col"></th>
-									<th scope="col">ID</th>
-									<th scope="col">Usuario</th>
-									<th scope="col">Nombre</th>
-									<th scope="col">Apellido</th>
-									<th scope="col">Email</th>
-									<th scope="col">Dni</th>
-									<th scope="col">Cuil</th>
-									<th scope="col">Cant. Cuentas</th>
-								</tr>
-							</thead>
-							<tbody>
+					<table id="table_id" class="table table-dark">
 
-								<%
-									ArrayList<CuentasPorUsuario> listaCu = null;
-									if (request.getAttribute("BusquedaCu") != null) {
-										listaCu = (ArrayList<CuentasPorUsuario>) request.getAttribute("BusquedaCu");
-									}
-								%>
-								<%
-									if (listaCu != null)
-										for (CuentasPorUsuario cu : listaCu) {
-								%>
-								<tr style="color: black">
-									<form method="post" action="ServletCuentas">
-										<td><input HeaderText="Borrado" class="btn btn-primary"
-											type="submit" name="btnListar" Onclick="abrir()"
-											id="btnListar" value="Listar"></td>
+						<thead>
+							<tr>
+								<th scope="col"></th>
+								<th scope="col"></th>
+								<th scope="col">ID</th>
+								<th scope="col">Usuario</th>
+								<th scope="col">Nombre</th>
+								<th scope="col">Apellido</th>
+								<th scope="col">Email</th>
+								<th scope="col">Dni</th>
+								<th scope="col">Cuil</th>
+								<th scope="col">Cant. Cuentas</th>
+							</tr>
+						</thead>
+						<tbody>
 
-										<td><input class="btn btn-primary" type="submit"
-											name="btnModalAgregar" id="btnModalAgregar"
-											Onclick="Agregar()" value="Agregar"></td>
-
-										<th scope="row"><%=cu.getUsuario().getIdUsuario()%> 
-											<input type="hidden" name="idUsuario" value="<%=cu.getUsuario().getIdUsuario()%>">
-										</th>
-										<td><%=cu.getUsuario().getNombreUsuario()%></td>
-										<td><%=cu.getUsuario().getNombre()%></td>
-										<td><%=cu.getUsuario().getApellido()%></td>
-										<td><%=cu.getUsuario().getEmail()%></td>
-										<td><%=cu.getUsuario().getDni()%></td>
-										<td><%=cu.getUsuario().getCuil()%></td>
-										<th scope="row" Style="text-align:center;"><%=cu.getCantidadCuentas()%> 
-											<input type="hidden" name="idUsuario" value="<%=cu.getCantidadCuentas()%>">
-										</th>
-									</form>
-								</tr>
-							</tbody>
 							<%
+								ArrayList<CuentasPorUsuario> listaCu = null;
+								if (request.getAttribute("BusquedaCu") != null) {
+									listaCu = (ArrayList<CuentasPorUsuario>) request.getAttribute("BusquedaCu");
 								}
 							%>
-						</table>
-					</div>
+							<%
+								if (listaCu != null)
+									for (CuentasPorUsuario cu : listaCu) {
+							%>
+							<tr style="color: black">
+								<form method="post" action="ServletCuentas">
+									<td><input HeaderText="Borrado" class="btn btn-primary"
+										type="submit" name="btnListar" Onclick="abrirListar()"
+										id="btnListar" value="Listar"></td>
+
+									<td><input class="btn btn-primary" type="submit"
+										name="btnModalAgregar" id="btnModalAgregar"
+										Onclick="abrirAgregar()" value="Agregar"></td>
+
+									<th scope="row"><%=cu.getUsuario().getIdUsuario()%> <input
+										type="hidden" name="idUsuario"
+										value="<%=cu.getUsuario().getIdUsuario()%>"></th>
+									<td><%=cu.getUsuario().getNombreUsuario()%></td>
+									<td><%=cu.getUsuario().getNombre()%></td>
+									<td><%=cu.getUsuario().getApellido()%></td>
+									<td><%=cu.getUsuario().getEmail()%></td>
+									<td><%=cu.getUsuario().getDni()%></td>
+									<td><%=cu.getUsuario().getCuil()%></td>
+									<th scope="row" Style="text-align: center;"><%=cu.getCantidadCuentas()%>
+										<input type="hidden" name="cantidadCuentas"
+										value="<%=cu.getCantidadCuentas()%>"></th>
+								</form>
+							</tr>
+						</tbody>
+						<%
+							}
+						%>
+					</table>
 				</div>
-			</form>
+			</div>
 		</div>
 	</div>
 
@@ -252,21 +255,22 @@
 											value="Modificar"></td>
 
 										<td><input HeaderText="Eliminar" class="btn btn-primary"
-											type="submit" name="btnEliminar" Onclick="abrirEliminar()"
-											id="btnModalEliminar" value="Eliminar"></td>
+											type="submit" name="btnModalEliminar"
+											Onclick="abrirEliminar()" id="btnModalEliminar"
+											value="Eliminar"></td>
 
 										<th scope="row"><%=c.getUsuario().getIdUsuario()%></th>
 										<td><%=c.getUsuario().getApellido()%></td>
 										<td><%=c.getUsuario().getCuil()%></td>
 										<td><%=c.getTipoDeCuenta().getDescripcion()%></td>
-										<th scope="row" Style="text-align:center;"><%=c.getNroDeCuenta()%> <input
-											type="hidden" name="idCuentaEdit"
+										<th scope="row" Style="text-align: center;"><%=c.getNroDeCuenta()%>
+											<input type="hidden" name="idCuentaEdit"
 											value="<%=c.getNroDeCuenta()%>"></th>
 									</form>
 								</tr>
 								<%
 									}
-										}
+									}
 								%>
 							</tbody>
 						</table>
@@ -352,6 +356,7 @@
 							value="Agregar" name="btnAgregar">
 					</div>
 				</div>
+			</form>
 		</div>
 	</div>
 
@@ -405,15 +410,16 @@
 
 						<script type="text/javascript">
 							
- 						$(function(){
+ 							$(function(){
   								$('#modalModificar').modal();
- 						});
+ 							});
  							
-					</script>
+						</script>
 
 						<%
 							}
 						%>
+
 					</div>
 
 					<div class="modal-footer">
@@ -421,35 +427,65 @@
 							value="Modificar" name=btnModificar>
 					</div>
 				</div>
+			</form>
 		</div>
 	</div>
 
 
-	<div class="modal fade bd-example-modal-sm" id="modalEliminar"
+	<div class="modal fade bd-example-modal-lg" id="modalEliminar"
 		tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
 		aria-hidden="true">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="staticBackdropLabel2">Eliminar
-						cliente</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<div class="form-group">¿Esta seguro de eliminar el cliente
-						seleccionado?</div>
-				</div>
-				<div class="modal-footer">
-					<form method="post" action="ServletUsuarios">
-						<input class="btn btn-primary col text-center" type="submit"
-							value="Confirmar" name="btnEliminarE">
-					</form>
-				</div>
 
-			</div>
+		<div class="modal-dialog modal-lg">
+
+			<form method="post" action="ServletCuentas">
+				<div class="modal-content">
+
+					<div class="modal-header">
+
+						<h5 class="modal-title" id="staticBackdropLabel2">Eliminar
+							Cuenta</h5>
+
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+
+					<div class="modal-body">
+						<div class="form-group">¿Esta seguro de eliminar la Cuenta
+							seleccionada?</div>
+					</div>
+					
+					<input type="hidden" ID="txtIdCtaDelete" class="form-control"
+								name="txtIdCtaDelete" Style="margin: 5px;"
+								value="<%=request.getAttribute("delete")%>">
+
+					<div class="modal-footer">
+						<input class="btn btn-primary col text-center" type="submit"
+							value="Confirmar" name="btnEliminar">
+					</div>
+
+					<%
+					
+						if(request.getAttribute("delete")!=null) {
+							
+					%>
+
+					<script type="text/javascript">
+							
+ 							$(function(){
+  								$('#modalEliminar').modal();
+ 							});
+ 							
+						</script>
+
+					<%
+						}
+					%>
+
+				</div>
+			</form>
 		</div>
 	</div>
 
@@ -500,4 +536,5 @@
 	</footer>
 
 </body>
+
 </html>

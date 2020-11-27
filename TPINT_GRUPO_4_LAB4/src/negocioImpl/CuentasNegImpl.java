@@ -41,11 +41,13 @@ public class CuentasNegImpl implements CuentasNeg {
 	}
 
 
-		@Override
-		public Cuentas obtenerCuenta(String Cbu) {
-			return Cdao.obtenerCuenta(Cbu);
-		}
+	@Override
+	public Cuentas obtenerCuenta(String Cbu) {
+		return Cdao.obtenerCuenta(Cbu);
+	}
 	
-	
-
+	@Override
+	public boolean eliminar(int id) {
+		return Cdao.eliminar(id);
+	}
 }
