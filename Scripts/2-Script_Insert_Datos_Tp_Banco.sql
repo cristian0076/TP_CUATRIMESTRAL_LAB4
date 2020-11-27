@@ -57,13 +57,17 @@ INSERT INTO `tp_banco`.`movimientos` (`IdMovimiento`,`IdUsuario`, `Fecha`, `Deta
     
 END //
 DELIMITER ;
+
 DELIMITER //
+DROP TRIGGER `tp_banco`.trigger_CreateMovementAndRowOfFees
+
 DELIMITER $$
 CREATE TRIGGER trigger_CreateMovementAndRowOfFees
     AFTER UPDATE
     ON prestamos FOR EACH ROW 
 BEGIN
   declare NroCuota INT default 0;
+  declare SaldoActual DECIMAL(10,2) default 0;
  IF (NEW.IdEstado = 2) THEN
   SET NroCuota = 1;
   WHILE NroCuota <= NEW.PlazoDePago DO
@@ -77,12 +81,10 @@ BEGIN
  INSERT INTO `tp_banco`.`movimientos` (`IdMovimiento`,`IdUsuario`, `Fecha`, `Detalle`, `Importe`, `IdTipoMovimiento`,`NroDeCuenta`) 
  VALUES (null,NEW.IdUsuario, (select NOW()), 'Alta de prestamo', NEW.ImporteSolicitado , '2', NEW.NroDeCuenta);
 
+SET SaldoActual = (Select Saldo from cuentas where NroDeCuenta = NEW.NroDeCuenta);
+UPDATE `tp_banco`.`cuentas` SET `Saldo` =  SaldoActual+NEW.importeSolicitado WHERE (`NroDeCuenta` = NEW.NroDeCuenta);
    END IF;
- 
- 
+  
 END$$    
-
 DELIMITER ;
-
-
 

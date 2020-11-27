@@ -143,7 +143,7 @@ public class CuentasDaoImpl implements CuentasDao {
 		}
 		return estado;	
 	}
-
+	
 	
 	public Cuentas obtenerCuenta(int NroCuenta) {
 		try {
@@ -198,7 +198,6 @@ public class CuentasDaoImpl implements CuentasDao {
 		return c;
 	}
 
-	
 	@Override
 	public Cuentas obtenerCuenta(String Cbu) {
 		try {

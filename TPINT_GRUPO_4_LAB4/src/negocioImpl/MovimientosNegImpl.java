@@ -1,5 +1,6 @@
 package negocioImpl;
 
+import java.util.Date;
 import java.util.ArrayList;
 
 import datos.MovimientosDao;
@@ -22,6 +23,11 @@ public class MovimientosNegImpl implements MovimientosNeg{
 	@Override
 	public ArrayList<Movimientos> ListarMovimientos(int nrodecuenta) {
 		return movDao.ListarMovimientos(nrodecuenta);
+	}
+
+	@Override
+	public ArrayList<Movimientos> ListarMovimientos(int tipodemovimiento, Date fechadesde, Date fechahasta) {
+		return movDao.ListarMovimientos(tipodemovimiento, fechadesde, fechahasta);
 	}
 
 }

@@ -68,15 +68,15 @@
 <div class="footer-siempre-abajo" style="background-color:white">
 
 
-<form action="ServletTransferencias?Transferencia=1" method="post">
+<form action="ServletTransferencias?Transferencia=1" method="post" onsubmit="return ValidarAccion()">
 
 <div class="container mt-3">
   <h2>Transferir a Cuenta Propia</h2>
   <p>Selecciona desde que cuenta queres enviar la plata</p> 
   <h3>Origen</h3> 
   <div class="dropdown">
-	  <select class="btn btn-light dropdown-toggle" aria-labelledby="dropdownMenuButton" name="CuentaOrigen">
-	    <option class="dropdown-item" value="SinSeleccion">Seleccionar Cuenta</option>  
+	  <select class="btn btn-light dropdown-toggle" required aria-labelledby="dropdownMenuButton" name="CuentaOrigen">
+	    <option class="dropdown-item" value="">Seleccionar Cuenta</option>  
   
   <% 
 	ArrayList<Cuentas> cuentas = null;
@@ -107,10 +107,10 @@
  	
  	<br> 
   	<div class="input-group mb-3">
- 		<input type="text" class="form-control" placeholder="Detalle / Concepto" name="txtDetalle" aria-label="Recipient's username" aria-describedby="basic-addon2">
+ 		<input type="text" class="form-control" placeholder="Detalle / Concepto" required name="txtDetalle" aria-label="Recipient's username" aria-describedby="basic-addon2">
 	</div>
 	<div class="input-group mb-3">
-   		<input type="text" class="form-control" placeholder="Importe" name="txtImporte" aria-label="Recipient's username" aria-describedby="basic-addon2">
+   		<input type="number" class="form-control" placeholder="Importe" step="any" required name="txtImporte" aria-label="Recipient's username" aria-describedby="basic-addon2">
     </div>
   
   
@@ -118,8 +118,8 @@
   <h3>Destino</h3>
   <h5>Seleccione su Cuenta Destino</h5> 
     <div class="dropdown">
-	  <select class="btn btn-light dropdown-toggle" aria-labelledby="dropdownMenuButton" name="CuentaDestino">
-	    <option class="dropdown-item" value="SinSeleccion">Seleccionar Cuenta</option>   
+	  <select class="btn btn-light dropdown-toggle"  required aria-labelledby="dropdownMenuButton" name="CuentaDestino">
+	    <option class="dropdown-item" value="">Seleccionar Cuenta</option>   
  <% 	if(cuentas!=null)
 	for(Cuentas cu : cuentas)
   	{
@@ -195,7 +195,21 @@ if(request.getAttribute("MensajeTransferencias")!= null)
 </div>
 
 
+<script type="text/javascript"> 
+function ValidarAccion()
+{
+var check = true;
 
+check = confirm("Desea continuar ? ") ;
+if( check != false)
+{	
+
+}
+
+return check;
+
+}
+</script>
 
 
 

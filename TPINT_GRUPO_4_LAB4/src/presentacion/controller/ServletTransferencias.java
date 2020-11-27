@@ -83,7 +83,7 @@ public class ServletTransferencias extends HttpServlet {
 			String mensaje;
 			String DirTransferencia="";
 			
-			if(request.getParameter("CuentaOrigen").toString().equals("SinSeleccion") == false)
+			if(request.getParameter("CuentaOrigen").toString().equals("") == false)
 			{
 			cuentaorigen =Integer.parseInt(request.getParameter("CuentaOrigen").toString());				
 			
@@ -112,6 +112,15 @@ public class ServletTransferencias extends HttpServlet {
 				{
 				System.out.print(request.getParameter("CbuDestino").toString());
 				c2= cuentasNeg.obtenerCuenta((request.getParameter("CbuDestino").toString()));
+					if(c2.getCbu() == null)
+					{
+						mensaje = "No se pudo realizar la transferencia, el CBU ingresado no se corresponde con ninguna cuenta registrada en el Banco";
+						request.setAttribute("MensajeTransferencias", mensaje);	
+						RequestDispatcher rd = request.getRequestDispatcher(DirTransferencia);   
+						rd.forward(request, response);
+						return;
+					}else {}
+				
 				}else {
 				error= 1;
 				}
@@ -119,7 +128,7 @@ public class ServletTransferencias extends HttpServlet {
 			}
 			else
 			{
-				if(request.getParameter("CuentaDestino").toString().equals("SinSeleccion") == false && request.getParameter("CuentaDestino").toString().equals(request.getParameter("CuentaOrigen").toString()) == false )
+				if(request.getParameter("CuentaDestino").toString().equals("") == false && request.getParameter("CuentaDestino").toString().equals(request.getParameter("CuentaOrigen").toString()) == false )
 					{
 					c2= cuentasNeg.obtenerCuenta(Integer.parseInt(request.getParameter("CuentaDestino").toString()));
 					}else {
@@ -130,14 +139,7 @@ public class ServletTransferencias extends HttpServlet {
 			}
 			
 			
-			if(c2.getCbu() == null)
-			{
-				mensaje = "No se pudo realizar la transferencia, el CBU ingresado no se corresponde con ninguna cuenta registrada en el Banco";
-				request.setAttribute("MensajeTransferencias", mensaje);	
-				RequestDispatcher rd = request.getRequestDispatcher(DirTransferencia);   
-		        rd.forward(request, response);
-		        return;
-			}
+
 			
 			
 			

@@ -67,15 +67,15 @@
 <div class="footer-siempre-abajo" style="background-color:white">
 
 
-	<form action="ServletTransferencias?Transferencia=2" method="post">
+	<form action="ServletTransferencias?Transferencia=2" method="post" onsubmit="return ValidarAccion()">
 
 	<div class="container mt-3">	
  		<h2>Transferir a Cuenta de Terceros</h2>
  	 	<p>Selecciona desde que cuenta queres enviar la plata</p> 
  		<h3>Origen</h3> 
 		<div class="dropdown">
-	  		<select class="btn btn-light dropdown-toggle" aria-labelledby="dropdownMenuButton" name="CuentaOrigen">
-	    		<option class="dropdown-item" value="SinSeleccion">Seleccionar Cuenta</option>  
+	  		<select class="btn btn-light dropdown-toggle" required aria-labelledby="dropdownMenuButton" name="CuentaOrigen">
+	    		<option class="dropdown-item" value="">Seleccionar Cuenta</option>  
 	  <% 
 		ArrayList<Cuentas> cuentas = null;
 		if(request.getAttribute("CuentasCliente")!=null)
@@ -100,17 +100,17 @@
 	</div>
  	<br> 
   	<div class="input-group mb-3">
- 		<input type="text" class="form-control" placeholder="Detalle / Concepto" name="txtDetalle" aria-label="Recipient's username" aria-describedby="basic-addon2">
+ 		<input type="text" class="form-control" placeholder="Detalle / Concepto" required name="txtDetalle" aria-label="Recipient's username" aria-describedby="basic-addon2">
 	</div>
 	<div class="input-group mb-3">
-   		<input type="text" class="form-control" placeholder="Importe" name="txtImporte" aria-label="Recipient's username" aria-describedby="basic-addon2">
+   		<input type="number" class="form-control" placeholder="Importe" required step="any" name="txtImporte" aria-label="Recipient's username" aria-describedby="basic-addon2">
     </div>	
 	
 	
   		<br>
   		<h3>Destino</h3>
   		<h5>Ingrese el CBU Destino</h5> 
-  		<input class="form-control" id="CbuDestino" type="text" placeholder="" name="CbuDestino">
+  		<input class="form-control" id="CbuDestino" required type="text" placeholder="Formato CBU -> 0000-12345678" name="CbuDestino">
   		<br>
   		<input  type="submit" value="Confirmar Transferencia" class="btn btn-dark" name="btnConfirmar">
 	</div>
@@ -156,6 +156,27 @@ if(request.getAttribute("MensajeTransferencias")!= null)
     </div>
   </div>
 </div>
+
+
+<script type="text/javascript"> 
+function ValidarAccion()
+{
+var check = true;
+
+check = confirm("Desea continuar ? ") ;
+if( check != false)
+{	
+
+}
+
+return check;
+
+}
+</script>
+
+
+
+
 
 
 <footer id="sticky-footer" class="py-4 bg-dark text-white-50">
