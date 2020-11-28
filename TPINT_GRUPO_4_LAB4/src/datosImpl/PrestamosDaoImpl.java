@@ -89,7 +89,7 @@ public class PrestamosDaoImpl implements PrestamosDao {
 		List<Prestamos> list = new ArrayList<Prestamos>();
 		try {
 			
-			ResultSet rs = cn.query("select P.IdPrestamo As `Nro de prestamo`,P.Fecha,P.ImporteSolicitado As `Importe solicitado`,P.ImporteConIntereses As `Importe a pagar`,P.PlazoDePago As `Cantidad de cuotas`,P.IdEstado,EDP.Descripcion from Prestamos As P Inner join estadosdeprestamo As EDP ON EDP.IdEstado = P.IdEstado WHERE P.IdUsuario = "+id);
+			ResultSet rs = cn.query("select P.IdPrestamo As `Nro de prestamo`,P.Fecha,P.ImporteSolicitado As `Importe solicitado`,P.ImporteConIntereses As `Importe a pagar`,P.PlazoDePago As `Cantidad de cuotas`,P.IdEstado,EDP.Descripcion,P.ValorCuotaMensual from Prestamos As P Inner join estadosdeprestamo As EDP ON EDP.IdEstado = P.IdEstado WHERE P.IdUsuario = "+id);
 			while(rs.next())
 			{
 				Prestamos p = new Prestamos();
@@ -104,7 +104,7 @@ public class PrestamosDaoImpl implements PrestamosDao {
 				e.setIdEstado(rs.getInt(6));
 				e.setDescripcion(rs.getString(7));
 				p.setEstadoPrestamo(e);
-				
+				p.setValorCuotaMensual(rs.getFloat(8));
 					list.add(p);
 				
 			}
@@ -292,6 +292,41 @@ public class PrestamosDaoImpl implements PrestamosDao {
 			cn.close();
 		}
 		return estado;	
+	}
+
+	@Override
+	public boolean Pagar_cuota(int idcuenta, int idprestamo, int nrocuota, float importe) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		cn = new Conexion();
+		cn.Open();
+		
+		boolean sp_check = false;
+		
+		String sp_pago_cuota = "call SP_PagoCuota "+"("+idcuenta+","+idprestamo+","+nrocuota+",'"+importe+")";
+		
+		try {
+		
+				
+		if(cn.execute(sp_pago_cuota)==true)
+		{
+			sp_check = true;
+		}
+	
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			cn.close();
+		}
+		
+		return sp_check;
 	}
 	
 }

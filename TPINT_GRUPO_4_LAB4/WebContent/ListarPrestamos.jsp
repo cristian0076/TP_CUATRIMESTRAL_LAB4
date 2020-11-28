@@ -1,6 +1,10 @@
 <%@page import = "entidad.Prestamos" %>
 <%@page import = "entidad.Usuarios" %>
 <%@page import="java.util.ArrayList" %>
+<%@page import="entidad.PrestamoPorCuota"%>
+<%@page import="java.util.Calendar"%>
+<%@page import="entidad.Cuentas"%>
+<%@page import="entidad.Usuarios"%>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -113,8 +117,8 @@
 
       <form  method="post" action="ServletPrestamoCLI?Param=3">
       <td><input   class="btn btn-primary" type="submit" name= "btnVerCuotas" Onclick="abrir()"  value="Cuotas" ></td>
-      <th scope="row"><%=p.getIdPrestamo()%> <input type="hidden" name="idUsuario" value="<%=p.getIdPrestamo() %>" ></th>
-      <td style="text-align: center"><%=p.getFecha()%></td>
+      <th scope="row"><%=p.getIdPrestamo()%> <input type="hidden" name="IDPRESTAMO" value="<%=p.getIdPrestamo() %>" ></th>
+      <td style="text-align: center"><%=p.getFecha()%><input type="hidden" name="ValorCuota" value="<%=p.getValorCuotaMensual() %>" ></td>
       <td style="text-align: center"><%=p.getImporteSolicitado()%></td>
       <td style="text-align: center" ><%=p.getImporteConIntereses()%></td>
       <td style="text-align: center" ><%=p.getPlazoDePago()%></td>
@@ -128,63 +132,212 @@
   
   
   <a href="ServletPrestamoCLI?Param=1"><button type="button" class="btn btn-secondary" href="ServletPrestamoCLI?Param=2">Solicitar Nuevo Prestamo</button></a>
-  <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#myModal">
-  	Pagar cuotas
-  </button>
+
+  
+  
+  
+  
+  <div class="modal fade bd-example-modal-sm" id="modalListar"
+		tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<form method="post" action="ServletPrestamoCLI?Param=4">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="staticBackdropLabel2">Lista de cuotas</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body" style="overflow:scroll;height:450px;">
+						<table class="table table-dark " style="overflow:scroll;height:50px;">
+							<thead>
+								<tr>
+									<th scope="col"></th>
+									<th scope="col" style="text-align: center" >Nro cuota</th>
+									<th scope="col" style="text-align: center" >Fecha</th>
+									<th scope="col" style="text-align: center" >Estado de pago</th>
+								</tr>
+							</thead>
+
+							<%
+								if (request.getAttribute("listaCuotas") != null) {
+							%>
+							<script type="text/javascript">
+                 				$(function(){
+                  					$('#modalListar').modal();
+                     				});
+                			</script>
+							<%
+								}
+							%>
+
+							<%
+								ArrayList<PrestamoPorCuota> Cuotas = null;
+								if (request.getAttribute("listaCuotas") != null) {
+									Cuotas = (ArrayList<PrestamoPorCuota>) request.getAttribute("listaCuotas");
+								}
+							%>
+
+
+							<%
+								if (Cuotas != null) {
+									for (PrestamoPorCuota c : Cuotas) {
+							%>
+							<tbody>
+								<tr>
+									<form method="post" action="ServletPrestamoCLI?Param=4">
+									
+									<%! int mes_a;int anio_a;int mes;int anio;boolean flag=false;%>
+									
+									<%
+							         Calendar cal = Calendar.getInstance();
+							         cal.setTime(c.getFechaPago());
+							         anio = cal.get(Calendar.YEAR);
+							         mes = cal.get(Calendar.MONTH);
+							         mes=mes+1;
+							         
+							        Calendar fecha = Calendar.getInstance();
+							 		anio_a = fecha.get(Calendar.YEAR); 
+							 		mes_a = fecha.get(Calendar.MONTH);  
+							 		mes_a=mes_a+1;
+							 		
+							 		if(anio_a > anio){flag = true;}
+							 		else{
+							 			flag=false;
+							 		}
+							 		
+							 		if(anio_a == anio){
+							 			if(mes_a == mes){
+							 				flag=true;
+							 			}else{
+							 				if(mes_a < mes){
+							 					int dif;
+							 					dif = mes-mes_a;
+							 					if(dif == 1){
+							 						flag=true;
+							 					}else{
+							 						flag=false;
+							 					}
+							 				}else{
+							 					flag=true;
+							 				}
+							 			}
+							 		}
+							 
+									%>
+										
+										<%if((c.getEstado() != true) && (flag==true)){ %>
+										<td><input HeaderText="Pagar" class="btn btn-primary"
+											type="submit" name="btnPagar" Onclick="AbrirPagar()"
+											id="btnModalPagar" value="Pagar"></td>
+										<%}else{%>
+											<%if(flag == true){ %>
+												<td><input HeaderText="Pagar" disabled = "true" class="btn btn-primary"
+											type="submit" name="btnPagar" Onclick="AbrirPagar()"
+											id="btnModalPagar" value="Pagado"></td>
+											<%}else{ %>
+												<td><input HeaderText="Pagar" disabled = "true" class="btn btn-primary"
+												type="submit" name="btnPagar" Onclick="AbrirPagar()"
+												id="btnModalPagar" value="Mes posterior"></td>
+											<%} %>
+										<%} %>
+										<td style="text-align: center" ><%=c.getNroCuota() %><input type="hidden" name="NUMEROCUOTA" value="<%=c.getNroCuota() %>" ></td>
+										<td style="text-align: center" ><%=c.getFechaPago()%></td>
+										<td style="text-align: center" ><%=c.getEstado() %></td>
+										<th scope="row" Style="text-align:center;"><input
+											type="hidden" name="idCuentaEdit"
+											value=""></th>
+									</form>
+								</tr>
+								<%
+									}
+										}
+								%>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+  
+  
+  		<%if(request.getAttribute("Pagar")!= null ){%>
+  		<script type="text/javascript">
+            $(function(){
+            $('#ModalPagar').modal();
+            });
+            <%}%>
+        </script>
+  
+  
+  
 
   <!-- The Modal -->
-  <div class="modal fade" id="myModal">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-      
-        <!-- Modal Header -->
-        <div class="modal-header">
-         <div class="dropdown">
-    		<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
-      			Débito de Cuenta
-    		</button>
-    		<div class="dropdown-menu">
-      			<a class="dropdown-item" href="#">Cuenta 1</a>
-      			<a class="dropdown-item" href="#">Cuenta 2</a>
-    		</div>
-  		 </div>
+   <div class="modal fade bd-example-modal-lg" id="ModalPagar" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <form method= "post" action="ServletPrestamoCLI?Param=5">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel3">Pagar prestamo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                       
+                        <h5>Seleccionar cuenta a debitar</h5><br>
+                        <p style="Color:red;">Solo apareceran en el listado las cuentas que cuenten con el saldo para cubrir la cuota.</p><br>
+                        <select name="cboCuenta" required="required" class="form-control">
+								<option value=0 selected="true" disabled="disabled">seleccionar
+									cuenta</option>
+								<%  if(request.getAttribute("listaC")!=null)
+							for(Cuentas cuenta : (ArrayList<Cuentas>)request.getAttribute("listaC")) 
+							{%>
+							   <%if(cuenta.getNroDeCuenta() != 0){ %>
+								<option value="<%= cuenta.getNroDeCuenta() %>"><%= "Nro: "+cuenta.getNroDeCuenta()+" - "+ cuenta.getTipoDeCuenta().getDescripcion() %></option>
+								<%} %>
+								<%} %>
+								
+								
+								<% if(request.getAttribute("SolicitudOk")!= null){ %>
+									
+			
+ 										<script type="text/javascript">
+ 						 				$(function(){
+ 						  					$('#modalSolicitudOk').modal();
+ 						 				});
+ 										</script>
+									
+									
+									<%request.setAttribute("SolicitudOk", null); %>
+								<%} %>
+							</select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input class="btn btn-primary col text-center" type="submit" value= "Pagar" name="btnPagar">
+                     <input class="btn btn-primary col text-center" type="submit" value= "Cancelar" name="btnCancelar">
+                </div>
+                </div>
+            </div>
+            </form>
         </div>
-        <div class="modal-header">
-         <div class="dropdown">
-    		<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
-      			Préstamo a pagar
-    		</button>
-    		<div class="dropdown-menu">
-      			<a class="dropdown-item" href="#">Prestamo 1</a>
-      			<a class="dropdown-item" href="#">Prestamo 2</a>
-    		</div>
-  		 </div>
-        </div>
-        <div class="modal-header">
-         <div class="dropdown">
-    		<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
-      			Cuotas
-    		</button>
-    		<div class="dropdown-menu">
-      			<a class="dropdown-item" href="#"> 1 </a>
-      			<a class="dropdown-item" href="#"> 2 </a>
-      			<a class="dropdown-item" href="#"> 3 </a>
-    		</div>
-  		 </div>
-        </div>
-        <!-- Modal body -->
-        <div class="modal-body"> Está pagando 2 cuotas del Préstamo 1. Total: 5000 
-        </div>
-        <div class="modal-body"> Se debitará de la Cuenta 1 
-        </div>
-        
-        <!-- Modal footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" >Continuar</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-        </div>
-        
-      </div>
-    </div>
-</div>
+
+	<script>
+		function AbrirPagar() {
+            $('#myModal').modal('show');
+        }
+	</script>
+	
+	<script>
+		function Abrir() {
+            $('#modalListar').modal('show');
+        }
+	</script>
+   
+
 </html>

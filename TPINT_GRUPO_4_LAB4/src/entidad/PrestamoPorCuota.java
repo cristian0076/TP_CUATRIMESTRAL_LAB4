@@ -1,12 +1,13 @@
 package entidad;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 public class PrestamoPorCuota {
 	
 	private Prestamos Prestamo;
 	private int NroCuota;
-	private Timestamp FechaPago;
+	private Date FechaPago;
 	private boolean Estado;
 	
 	
@@ -26,12 +27,16 @@ public class PrestamoPorCuota {
 	public Prestamos getPrestamo() {
 		return Prestamo;
 	}
+	
+	public boolean getEstado() {
+		return Estado;
+	}
 
 	public int getNroCuota() {
 		return NroCuota;
 	}
 
-	public Timestamp getFechaPago() {
+	public Date getFechaPago() {
 		return FechaPago;
 	}
 
@@ -47,7 +52,7 @@ public class PrestamoPorCuota {
 		NroCuota = nroCuota;
 	}
 
-	public void setFechaPago(Timestamp fechaPago) {
+	public void setFechaPago(Date fechaPago) {
 		FechaPago = fechaPago;
 	}
 

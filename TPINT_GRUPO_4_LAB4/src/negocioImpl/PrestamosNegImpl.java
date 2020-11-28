@@ -54,4 +54,11 @@ public class PrestamosNegImpl implements PrestamosNeg {
 	public boolean modificar(Prestamos prestamo) {
 		return PrestamosDao.modificar(prestamo);
 	}
+
+
+
+	@Override
+	public boolean Pagar_cuota(int idcuenta, int idprestamo, int nrocuota, float importe) {
+		return PrestamosDao.Pagar_cuota(idcuenta, idprestamo, nrocuota, importe);
+	}
 }

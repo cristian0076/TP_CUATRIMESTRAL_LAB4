@@ -10,4 +10,5 @@ public interface PrestamosNeg {
 	public List<Prestamos> ObtenerPrestamos(int IdUsuario);
 	public Prestamos obtenerPrestamo(int IdPrestamo);
 	public boolean modificar(Prestamos prestamo);
+	public boolean Pagar_cuota(int idcuenta,int idprestamo,int nrocuota,float importe);
 }

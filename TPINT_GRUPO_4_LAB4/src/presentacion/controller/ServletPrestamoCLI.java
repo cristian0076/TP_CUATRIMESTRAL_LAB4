@@ -13,9 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import entidad.Cuentas;
 import entidad.EstadosDePrestamo;
+import entidad.PrestamoPorCuota;
 import entidad.Prestamos;
 import entidad.Usuarios;
+import negocio.PrestamosNeg;
 import negocioImpl.CuentasNegImpl;
+import negocioImpl.PrestamoPorCuotaNegImpl;
 import negocioImpl.PrestamosNegImpl;
 
 /**
@@ -66,8 +69,62 @@ public class ServletPrestamoCLI extends HttpServlet {
 		if(request.getParameter("Param")!=null) {
 			parametro = Integer.parseInt(request.getParameter("Param"));
 		}
-		if(parametro == 3) {}
+		if(parametro == 3 || parametro == 4) {
+			if(parametro == 3) {
+				ArrayList<PrestamoPorCuota> listaCuotas =new ArrayList<PrestamoPorCuota>();
+				PrestamoPorCuotaNegImpl negocio = new PrestamoPorCuotaNegImpl();
+				
+				if(request.getParameter("ValorCuota")!=null) {
+					request.getSession().setAttribute("ValorCuota2",Float.parseFloat(request.getParameter("ValorCuota")));
+				}
+			
+				if(request.getParameter("IDPRESTAMO")!= null){
+					request.getSession().setAttribute("ID_PRESTAMO",request.getParameter("IDPRESTAMO"));
+					int IdPrestamo = Integer.parseInt(request.getParameter("IDPRESTAMO").toString());
+					listaCuotas = (ArrayList<PrestamoPorCuota>) negocio.ObtenerCuotas(IdPrestamo);
+					request.setAttribute("listaCuotas",listaCuotas);
+					RequestDispatcher rd = request.getRequestDispatcher("/ListarPrestamos.jsp");   
+					rd.forward(request, response);
+				}
+			}else {
+				
+				ArrayList<Cuentas> listaC1=new ArrayList<Cuentas>();
+				ArrayList<Cuentas> listaC=new ArrayList<Cuentas>();
+				CuentasNegImpl negocio = new CuentasNegImpl();
+				Usuarios u = new Usuarios();
+				u= (Usuarios)request.getSession().getAttribute("Session_user");
+				listaC1 = (ArrayList<Cuentas>)negocio.ObtenerCuentas(u.getIdUsuario());
+				
+				float valor_cuota = Float.parseFloat(request.getSession().getAttribute("ValorCuota2").toString());
+				request.getSession().setAttribute("Numero_Cuota",request.getParameter("NUMEROCUOTA"));
+				for (Cuentas cuentas : listaC1) {
+					if(cuentas.getSaldo() > valor_cuota) {
+						listaC.add(cuentas);
+					}
+				}
+				
+				request.setAttribute("listaC", listaC);
+			
+				
+				request.setAttribute("Pagar",1);
+				
+				
+				RequestDispatcher rd = request.getRequestDispatcher("/ListarPrestamos.jsp");   
+				rd.forward(request, response);
+			}
+		}
 		else {
+			if(parametro==5) {
+				PrestamosNegImpl negocio = new PrestamosNegImpl();
+				boolean estado = false;
+				int nro_cuota = Integer.parseInt(request.getSession().getAttribute("Numero_Cuota").toString());
+				int IDcuenta = Integer.parseInt(request.getParameter("cboCuenta"));
+				int IDprestamo = Integer.parseInt(request.getSession().getAttribute("ID_PRESTAMO").toString());
+				float saldo = Float.parseFloat(request.getSession().getAttribute("ValorCuota2").toString());
+				negocio.Pagar_cuota(IDcuenta,IDprestamo,nro_cuota,saldo);
+				RequestDispatcher rd = request.getRequestDispatcher("/ListarPrestamos.jsp");   
+				rd.forward(request, response);
+			}
 		ArrayList<Cuentas> listaC=new ArrayList<Cuentas>();
 		CuentasNegImpl negocio = new CuentasNegImpl();
 		Usuarios u = new Usuarios();
