@@ -65,9 +65,7 @@
 						cuentas</a> <a class="dropdown-item" href="AutorizarPrestamos.jsp">Autorizar
 						Prestamos</a>
 				</div></li>
-			<li class="nav-item active"><a class="nav-link"
-				href="Reportes.jsp" style="color: white">Reportes <span
-					class="sr-only">(current)</span></a></li>
+
 		</ul>
 	</div>
 	<%! Usuarios u = new Usuarios(); %> <span id="perfil"

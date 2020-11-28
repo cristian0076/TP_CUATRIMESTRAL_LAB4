@@ -26,8 +26,8 @@ public class MovimientosNegImpl implements MovimientosNeg{
 	}
 
 	@Override
-	public ArrayList<Movimientos> ListarMovimientos(int tipodemovimiento, Date fechadesde, Date fechahasta) {
-		return movDao.ListarMovimientos(tipodemovimiento, fechadesde, fechahasta);
+	public ArrayList<Movimientos> ListarMovimientos(int tipodemovimiento, Date fechadesde, Date fechahasta, int nrodecuenta) {
+		return movDao.ListarMovimientos(tipodemovimiento, fechadesde, fechahasta, nrodecuenta);
 	}
 
 }

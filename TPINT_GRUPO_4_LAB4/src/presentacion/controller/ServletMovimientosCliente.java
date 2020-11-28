@@ -67,6 +67,7 @@ public class ServletMovimientosCliente extends HttpServlet {
 			int idTM = 0;
 			Date fechadesde = null;
 			Date fechahasta = null;
+			int nrodecuenta = 0;
 			
 			SimpleDateFormat d = new SimpleDateFormat("yyyy-MM-dd");
 			
@@ -101,7 +102,9 @@ public class ServletMovimientosCliente extends HttpServlet {
 			listatm = (ArrayList<TiposDeMovimientos>)negocioTM.listartiposDeMovimientos();
 			
 			if(error!=1) {
-			movimientos = negocio.ListarMovimientos(idTM,fechadesde,fechahasta);
+			
+				nrodecuenta = Integer.parseInt(request.getParameter("NroDeCuenta"));
+				movimientos = negocio.ListarMovimientos(idTM,fechadesde,fechahasta,nrodecuenta);
 			}
 				
 			request.setAttribute("listaMovimientos",movimientos);

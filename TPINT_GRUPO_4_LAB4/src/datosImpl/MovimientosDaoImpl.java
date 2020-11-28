@@ -104,7 +104,7 @@ public class MovimientosDaoImpl implements MovimientosDao {
 
 
 	@Override
-	public ArrayList<Movimientos> ListarMovimientos(int tipodemovimiento, Date fechadesde, Date fechahasta) {
+	public ArrayList<Movimientos> ListarMovimientos(int tipodemovimiento, Date fechadesde, Date fechahasta,int nrodecuenta) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (Exception e) {
@@ -124,9 +124,9 @@ public class MovimientosDaoImpl implements MovimientosDao {
 		if(tipodemovimiento != 0)
 		{
 			
-			 query = "SELECT TM.DescripcionTipoDeMovimiento, M.Fecha, M.Detalle, M.Importe FROM tp_banco.movimientos M INNER JOIN tiposdemovimientos TM ON M.IdTipoMovimiento = TM.IdTipoMovimiento WHERE TM.IdTipoMovimiento = "+tipodemovimiento+" and M.Fecha >= '"+date1+" 00:00:00' and M.Fecha <= '"+date2+" 23:59:59' ORDER BY M.Fecha DESC";
+			 query = "SELECT TM.DescripcionTipoDeMovimiento, M.Fecha, M.Detalle, M.Importe FROM tp_banco.movimientos M INNER JOIN tiposdemovimientos TM ON M.IdTipoMovimiento = TM.IdTipoMovimiento WHERE M.NroDeCuenta = "+nrodecuenta +" AND TM.IdTipoMovimiento = "+tipodemovimiento+" and M.Fecha >= '"+date1+" 00:00:00' and M.Fecha <= '"+date2+" 23:59:59' ORDER BY M.Fecha DESC";
 		}else {
-			 query = "SELECT TM.DescripcionTipoDeMovimiento, M.Fecha, M.Detalle, M.Importe FROM tp_banco.movimientos M INNER JOIN tiposdemovimientos TM ON M.IdTipoMovimiento = TM.IdTipoMovimiento WHERE  M.Fecha >= '"+date1+" 00:00:00' and M.Fecha <= '"+date2+" 23:59:59' ORDER BY M.Fecha DESC";
+			 query = "SELECT TM.DescripcionTipoDeMovimiento, M.Fecha, M.Detalle, M.Importe FROM tp_banco.movimientos M INNER JOIN tiposdemovimientos TM ON M.IdTipoMovimiento = TM.IdTipoMovimiento WHERE M.NroDeCuenta = "+nrodecuenta +" AND M.Fecha >= '"+date1+" 00:00:00' and M.Fecha <= '"+date2+" 23:59:59' ORDER BY M.Fecha DESC";
 		}
 			
 		System.out.println(query);

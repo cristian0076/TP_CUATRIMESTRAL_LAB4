@@ -1,3 +1,5 @@
+<%@page import="entidad.Reporte01"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import = "entidad.Usuarios" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -19,6 +21,8 @@
 	
 <!--Estilos propios-->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/Estilos/PrincipalADM.css" />
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
 </head>
 <body>
 
@@ -44,9 +48,7 @@
 							class="dropdown-item" href="ABMCuentas.jsp">Apertura de cuentas</a>
 							<a class="dropdown-item" href="AutorizarPrestamos.jsp">Autorizar Prestamos</a>
 					</div></li>
-				<li class="nav-item active"><a class="nav-link" href="Reportes.jsp"
-					style="color: white">Reportes <span class="sr-only">(current)</span></a>
-				</li>
+
 			</ul>
 		</div>
 		<%! Usuarios u = new Usuarios(); %>
@@ -70,51 +72,185 @@
 		</span>
 	</nav>
 
+<div class="container mt-3">
+    <div class="footer-siempre-abajo" style="background-color:white">
+  <h2>Reportes</h2>
+  <p>podremos generar el reporte buscando por los filtros solicitados y se generara un archivo PDF. </p>  
+
+ <form method="post" action="ServletReporte" >
+ <select class= "form-control" required aria-labelledby="dropdownMenuButton" name="SelectMes">
+	    <option class="dropdown-item" value="">-- Seleccionar Mes -- </option>  
+		<option class="dropdown-item" value="1">Enero </option>
+        <option class="dropdown-item" value="2">Febrero </option>
+ 		<option class="dropdown-item" value="3">Marzo </option>
+ 		<option class="dropdown-item" value="4">Abril</option>
+ 		<option class="dropdown-item" value="5">Mayo</option>
+ 		<option class="dropdown-item" value="6">Junio</option>
+ 		<option class="dropdown-item" value="7">Julio</option>
+ 		<option class="dropdown-item" value="8">Agosto</option>
+ 		<option class="dropdown-item" value="9">Septiembre</option>
+ 		<option class="dropdown-item" value="10">Octubre</option>
+ 		<option class="dropdown-item" value="11">Noviembre</option>
+ 		<option class="dropdown-item" value="12">Diciembre</option>
+ </select>
+ <br>
+	<input  type="submit" value="Aplicar Filtro" class="btn btn-dark" name="btnInforme">
+</form> 
+  <br>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<br>
+<br>
+<div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+ </div>
+</div>
+
+
+<%
+
+ArrayList<Reporte01> lista= null;
+ArrayList<Reporte01> lista2= null;
+
+if(request.getAttribute("Informe")!=null)
+{
+	lista = (ArrayList<Reporte01>)request.getAttribute("Informe");
+}
+
+if(request.getAttribute("Informe2")!=null)
+{
+	lista2 = (ArrayList<Reporte01>)request.getAttribute("Informe2");
+}
+
+
+%>
 
 
 
-	<div class="container mt-3">
-		<div class="footer-siempre-abajo" style="background-color: white">
-			<h2>Se podra ver una lista de los prestamos solicitados dentro
-				de los 5 dias</h2>
-			<p>la idea de esto es poder dar una vista rapida a una tarea
-				importante del administrador con sus usuarios. tendra un filtro
-				rapido para ver el estado de cada uno.</p>
-			<input class="form-control" id="myInput" type="text" placeholder="">
-			<br>
-			<table class="table table-bordered">
-				<thead>
-					<tr>
-						<th>Cuenta</th>
-						<th>Importe solicitado</th>
-						<th>Fecha</th>
-						<th>Cantidad de cuotas</th>
-						<th>Motivo del préstamo.</th>
-						<th>Estado</th>
-					</tr>
-				</thead>
-				<tbody id="myTable">
-					<tr>
-						<td>00356555154/5</td>
-						<td>50.000</td>
-						<td>05/02/2020</td>
-						<td>24</td>
-						<td>Refacción de inmueble</td>
-						<td>Rechazado</td>
-					</tr>
-					<tr>
-						<td>00356555154/4</td>
-						<td>30.000</td>
-						<td>10/06/2019</td>
-						<td>24</td>
-						<td>Viajes y Turismo</td>
-						<td>Aprobado</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<!-- Footer siempre abajo -->
-	</div>
+
+<script type="text/javascript">
+$(function () {
+	$('#container').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Saldo final por dia - Caja de Ahorro'
+        },
+        subtitle: {
+            text: 'Administracion Banco'
+        },
+        xAxis: {
+            categories: [
+            	<%
+            	
+            	if(lista!=null)
+            		for(Reporte01 r : lista)
+            		{
+            	%>
+             	'<%=r.getDia() %>',          
+                <%}
+                %>
+                ]
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Pesos $'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f} $</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [{
+            name: 'Caja de Ahorro',
+            data: [
+            	
+				<%         	
+            	if(lista!=null)
+            		for(Reporte01 r : lista)
+            		{
+            	%>
+            	<%=r.getImporte()%>,          
+                <%}%>
+                ]
+      }]
+    });
+});
+</script>
+
+
+<script type="text/javascript">
+$(function () {
+	$('#container2').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Saldo final por dia - Cuenta Corriente'
+        },
+        subtitle: {
+            text: 'Administracion Banco'
+        },
+        xAxis: {
+            categories: [
+            	<%
+            	
+            	if(lista2!=null)
+            		for(Reporte01 r : lista2)
+            		{
+            	%>
+             	'<%=r.getDia() %>',          
+                <%}
+                %>
+                ]
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Pesos $'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f} $</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [{
+            name: 'Cuenta Corriente',
+            data: [
+            	
+				<%         	
+            	if(lista2!=null)
+            		for(Reporte01 r : lista2)
+            		{
+            	%>
+            	<%=r.getImporte()%>,          
+                <%}%>
+                ]
+      }]
+    });
+});
+</script>
 
 
 	<footer id="sticky-footer" class="py-4 bg-dark text-white-50">

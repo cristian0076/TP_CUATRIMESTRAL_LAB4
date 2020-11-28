@@ -96,8 +96,8 @@ DROP PROCEDURE IF EXISTS SP_PagoCuota;
 DELIMITER //
 CREATE PROCEDURE SP_PagoCuota (
 	IN  
-		cuenta INT,
-	    IdPrestamo INT,
+	cuenta INT,
+	  IdPrestamoo INT,
         NroDeCuota INT,
         Importe decimal(10,2)
 )
@@ -105,11 +105,11 @@ BEGIN
 
 SET @Saldo = ((SELECT Saldo From Cuentas WHERE NroDeCuenta= cuenta) - Importe);
 SET @Usuario = (SELECT distinct IdUsuario From Cuentas WHERE NroDeCuenta = cuenta);
+SET @Prestamoo = (SELECT distinct IdPrestamo From prestamos  WHERE Idprestamo = IdPrestamoo);
 
-  
+  UPDATE `tp_banco`.`prestamoporcuota` SET `Estado` = 1 WHERE `IdPrestamo` = @Prestamoo and `NroCuota` = NroDeCuota;
 UPDATE `tp_banco`.`cuentas` SET `Saldo` = @Saldo WHERE (`NroDeCuenta` = cuenta);
 INSERT INTO `tp_banco`.`movimientos` (`IdUsuario`, `Fecha`, `Detalle`, `Importe`, `IdTipoMovimiento`,`NroDeCuenta`) VALUES (@Usuario, (select NOW()),'Pago de cuota',Importe,3,cuenta);
-UPDATE `tp_banco`.`prestamoporcuota` SET `Estado` = 1 WHERE (`IdPrestamo` = IdPrestamo) and (`NroCuota` = NroDeCuota);
     
 END //
 DELIMITER ;
