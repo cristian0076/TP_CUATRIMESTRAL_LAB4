@@ -43,52 +43,48 @@
 
 <body>
 
-<nav
+	<nav
 		class="navbar navbar-expand-lg navbar-light  bg-dark text-white-50">
 
-		<a class="navbar-brand" style="color: white" href="#">Home Bank</a>
+	<a class="navbar-brand" style="color: white" href="#">Home Bank</a>
 
 
-		<div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-			<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-				<li class="nav-item active"><a class="nav-link"
-					href="PrincipalADM.jsp" style="color: white">Inicio <span
-						class="sr-only">(current)</span></a></li>
-				<li class="nav-item dropdown"><a
-					class="nav-link dropdown-toggle" style="color: white" href="#"
-					id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
-					aria-haspopup="true" aria-expanded="false"> Administrar
-						clientes </a>
-					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-						<a class="dropdown-item" href="ABMclientes.jsp">ABM Clientes</a> <a
-							class="dropdown-item" href="ABMCuentas.jsp">Apertura de cuentas</a>
-							<a class="dropdown-item" href="AutorizarPrestamos.jsp">Autorizar Prestamos</a>
-					</div></li>
-				<li class="nav-item active"><a class="nav-link" href="Reportes.jsp"
-					style="color: white">Reportes <span class="sr-only">(current)</span></a>
-				</li>
-			</ul>
-		</div>
-		<%! Usuarios u = new Usuarios(); %>
-
-		<span id="perfil" class="navbar-text" style="padding: 10px">
-		<%
+	<div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+		<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+			<li class="nav-item active"><a class="nav-link"
+				href="PrincipalADM.jsp" style="color: white">Inicio <span
+					class="sr-only">(current)</span></a></li>
+			<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle" style="color: white" href="#"
+				id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
+				aria-haspopup="true" aria-expanded="false"> Administrar clientes
+			</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+					<a class="dropdown-item" href="ABMclientes.jsp">ABM Clientes</a> <a
+						class="dropdown-item" href="ABMCuentas.jsp">Apertura de
+						cuentas</a> <a class="dropdown-item" href="AutorizarPrestamos.jsp">Autorizar
+						Prestamos</a>
+				</div></li>
+			<li class="nav-item active"><a class="nav-link"
+				href="Reportes.jsp" style="color: white">Reportes <span
+					class="sr-only">(current)</span></a></li>
+		</ul>
+	</div>
+	<%! Usuarios u = new Usuarios(); %> <span id="perfil"
+		class="navbar-text" style="padding: 10px; color: white"> <%
 			if(request.getSession().getAttribute("Session_user") != null){
 				u= (Usuarios)request.getSession().getAttribute("Session_user");
          	   	System.out.println(u.getApellido()); 
 			}
-         	   %>
-         	   <%if(u.getApellido() != null){ %>
-      		 <label><%=u.getNombre()+" "+u.getApellido() %></label>
-      		 <%} %>
-		 <a
-			href="DatosPersonalesADM.jsp"> <img src="https://i.ibb.co/Xzbf1pS/usuario.png" />
-		</a> Perfil
-		</span> <span id="salir" class="navbar-text"> <a href="Login.jsp">
-				<img src="https://i.ibb.co/TcV6LW4/salir-arriba-a-la-derecha.png" />
-		</a> Salir
-		</span>
-	</nav>
+         	   %> <%if(u.getApellido() != null){ %> <label><%=u.getNombre()+" "+u.getApellido() %></label>
+		<%} %> <a href="DatosPersonalesADM.jsp"> <img
+			src="https://i.ibb.co/Xzbf1pS/usuario.png" />
+	</a> Perfil
+	</span> <span id="salir" class="navbar-text" style="color: white"> <a
+		href="Login.jsp"> <img
+			src="https://i.ibb.co/TcV6LW4/salir-arriba-a-la-derecha.png" />
+	</a> Salir
+	</span> </nav>
 	<h1 style="text-align: center; padding-top: 30px;"
 		class="font-italic text">Administración de cuentas</h1>
 
@@ -134,73 +130,73 @@
 						</div>
 					</div>
 				</div>
-			</form>
 
-			<br>
-			<div class="row" style="overflow: auto; height: 400px;">
+				<br>
+				<div class="row" style="overflow: auto; height: 400px;">
 
-				<div class="col-md-12 col-sm-4"
-					style="padding: 2px; text-align: center;">
+					<div class="col-md-12 col-sm-4"
+						style="padding: 2px; text-align: center;">
 
-					<table id="table_id" class="table table-dark">
+						<table id="table_id" class="table table-dark">
 
-						<thead>
-							<tr>
-								<th scope="col"></th>
-								<th scope="col"></th>
-								<th scope="col">ID</th>
-								<th scope="col">Usuario</th>
-								<th scope="col">Nombre</th>
-								<th scope="col">Apellido</th>
-								<th scope="col">Email</th>
-								<th scope="col">Dni</th>
-								<th scope="col">Cuil</th>
-								<th scope="col">Cant. Cuentas</th>
-							</tr>
-						</thead>
-						<tbody>
+							<thead>
+								<tr>
+									<th scope="col"></th>
+									<th scope="col"></th>
+									<th scope="col">ID</th>
+									<th scope="col">Usuario</th>
+									<th scope="col">Nombre</th>
+									<th scope="col">Apellido</th>
+									<th scope="col">Email</th>
+									<th scope="col">Dni</th>
+									<th scope="col">Cuil</th>
+									<th scope="col">Cant. Cuentas</th>
+								</tr>
+							</thead>
+							<tbody>
 
-							<%
+								<%
 								ArrayList<CuentasPorUsuario> listaCu = null;
 								if (request.getAttribute("BusquedaCu") != null) {
 									listaCu = (ArrayList<CuentasPorUsuario>) request.getAttribute("BusquedaCu");
 								}
 							%>
-							<%
+								<%
 								if (listaCu != null)
 									for (CuentasPorUsuario cu : listaCu) {
 							%>
-							<tr style="color: black">
-								<form method="post" action="ServletCuentas">
-									<td><input HeaderText="Borrado" class="btn btn-primary"
-										type="submit" name="btnListar" Onclick="abrirListar()"
-										id="btnListar" value="Listar"></td>
+								<tr style="color: black">
+									<form method="post" action="ServletCuentas">
+										<td><input HeaderText="Borrado" class="btn btn-primary"
+											type="submit" name="btnListar" Onclick="abrirListar()"
+											id="btnListar" value="Listar"></td>
 
-									<td><input class="btn btn-primary" type="submit"
-										name="btnModalAgregar" id="btnModalAgregar"
-										Onclick="abrirAgregar()" value="Agregar"></td>
+										<td><input class="btn btn-primary" type="submit"
+											name="btnModalAgregar" id="btnModalAgregar"
+											Onclick="abrirAgregar()" value="Agregar"></td>
 
-									<th scope="row"><%=cu.getUsuario().getIdUsuario()%> <input
-										type="hidden" name="idUsuario"
-										value="<%=cu.getUsuario().getIdUsuario()%>"></th>
-									<td><%=cu.getUsuario().getNombreUsuario()%></td>
-									<td><%=cu.getUsuario().getNombre()%></td>
-									<td><%=cu.getUsuario().getApellido()%></td>
-									<td><%=cu.getUsuario().getEmail()%></td>
-									<td><%=cu.getUsuario().getDni()%></td>
-									<td><%=cu.getUsuario().getCuil()%></td>
-									<th scope="row" Style="text-align: center;"><%=cu.getCantidadCuentas()%>
-										<input type="hidden" name="cantidadCuentas"
-										value="<%=cu.getCantidadCuentas()%>"></th>
-								</form>
-							</tr>
-						</tbody>
-						<%
-							}
-						%>
-					</table>
+										<th scope="row"><%=cu.getUsuario().getIdUsuario()%> <input
+											type="hidden" name="idUsuario"
+											value="<%=cu.getUsuario().getIdUsuario()%>"></th>
+										<td><%=cu.getUsuario().getNombreUsuario()%></td>
+										<td><%=cu.getUsuario().getNombre()%></td>
+										<td><%=cu.getUsuario().getApellido()%></td>
+										<td><%=cu.getUsuario().getEmail()%></td>
+										<td><%=cu.getUsuario().getDni()%></td>
+										<td><%=cu.getUsuario().getCuil()%></td>
+										<td scope="row" Style="text-align: center;"><%=cu.getCantidadCuentas()%>
+											<input type="hidden" name="cantidadCuentas"
+											value="<%=cu.getCantidadCuentas()%>"></td>
+									</form>
+									<%
+									}
+								%>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
-			</div>
+			</form>
 		</div>
 	</div>
 
@@ -232,20 +228,21 @@
 									<th scope="col">Nro. Cuenta</th>
 								</tr>
 							</thead>
+							<tbody>
 
-							<%
+								<%
 								if (request.getAttribute("listaC") != null) {
 							%>
-							<script type="text/javascript">
+								<script type="text/javascript">
                  				$(function(){
                   					$('#modalListar').modal();
                      				});
                 			</script>
-							<%
+								<%
 								}
 							%>
 
-							<%
+								<%
 								ArrayList<Cuentas> CuentasUsuario = null;
 								if (request.getAttribute("listaC") != null) {
 									CuentasUsuario = (ArrayList<Cuentas>) request.getAttribute("listaC");
@@ -253,11 +250,11 @@
 							%>
 
 
-							<%
+								<%
 								if (CuentasUsuario != null) {
 									for (Cuentas c : CuentasUsuario) {
 							%>
-							<tbody>
+
 								<tr>
 									<form method="post" action="ServletCuentas">
 										<td><input HeaderText="Modificar" class="btn btn-primary"
@@ -278,9 +275,12 @@
 											<input type="hidden" name="idCuentaEdit"
 											value="<%=c.getNroDeCuenta()%>"></th>
 									</form>
-								</tr>
-								<%
+
+									<%
 									}
+									%>
+								</tr>
+								<%	
 									}
 								%>
 							</tbody>
@@ -467,10 +467,10 @@
 						<div class="form-group">¿Esta seguro de eliminar la Cuenta
 							seleccionada?</div>
 					</div>
-					
+
 					<input type="hidden" ID="txtIdCtaDelete" class="form-control"
-								name="txtIdCtaDelete" Style="margin: 5px;"
-								value="<%=request.getAttribute("delete")%>">
+						name="txtIdCtaDelete" Style="margin: 5px;"
+						value="<%=request.getAttribute("delete")%>">
 
 					<div class="modal-footer">
 						<input class="btn btn-primary col text-center" type="submit"

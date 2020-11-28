@@ -1,3 +1,4 @@
+<%@page import = "entidad.Usuarios" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -37,12 +38,26 @@
 							class="dropdown-item" href="ABMCuentas.jsp">Apertura de cuentas</a>
 					</div></li>
 				<li class="nav-item active"><a class="nav-link" href="Reportes.jsp"
-					style="color: white">Reportes <span class="sr-only">(current)</span></a>
+					style="color: white">Reportes <span class="sr-only">(current)prueba</span></a>
 				</li>
 			</ul>
 		</div>
+		
+		<%! Usuarios u = new Usuarios(); %>
 
-		<span id="perfil" class="navbar-text" style="padding: 10px"> <a
+		<span id="perfil" class="navbar-text" style="padding: 10px"> 
+		
+		<%
+			if(request.getSession().getAttribute("Session_user") != null){
+				u= (Usuarios)request.getSession().getAttribute("Session_user");
+         	   	System.out.println(u.getApellido()); 
+			}
+         	   %>
+         	   <%if(u.getApellido() != null){ %>
+      		 <label><%=u.getNombre()+" "+u.getApellido() %></label>
+      		 <%} %>
+		
+		<a
 			href="DatosPersonalesADM.jsp"> <img src="https://i.ibb.co/Xzbf1pS/usuario.png" />
 		</a> Perfil
 		</span> <span id="salir" class="navbar-text"> <a href="Login.jsp">
@@ -57,26 +72,25 @@
 <div class="card">
   <h4 class="card-header">Mi Perfil</h4>
   <div class="card-body">
-    <h5 class="card-title">Martin Lopez</h5>
-    <p class="card-text">DNI: 12345678</p>
-    <p class="card-text">CUIT: XX-12345678-X</p>
+    <h5 class="card-title"><%= u.getNombre() %></h5>
+    <p class="card-text">DNI: <%=u.getDni() %></p>
+    <p class="card-text">CUIL: <%=u.getCuil() %></p>
     <p class="card-text">Nacionalidad: Argentina</p>
+
    </div>
 </div>
 <div class="card">
   <h4 class="card-header">Domicilio</h4>
   <div class="card-body">
-    <p class="card-text">Direccion: Cuyo 1000</p>
-    <p class="card-text">Localidad: Martinez</p>
+    <p class="card-text">Direccion:  <%=u.getDireccion() %></p>
     <p class="card-text">Provincia: Buenos Aires</p>
    </div>
 </div>
 <div class="card">
   <h4 class="card-header">Contacto</h4>
   <div class="card-body">
-    <p class="card-text">Nro Telefono/Celular: 15-1524-1234</p>
-    <p class="card-text">Email: martin.lopez@gmail.com</p>
-    
+    <p class="card-text">Nro Telefono/Celular: <%= u.getNumeroDeTelefono() %></p>
+    <p class="card-text">Email: <%= u.getEmail() %></p> 
    </div>
 </div>
 </div>

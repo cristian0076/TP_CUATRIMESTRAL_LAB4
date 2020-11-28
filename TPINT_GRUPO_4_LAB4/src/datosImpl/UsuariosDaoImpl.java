@@ -204,7 +204,13 @@ public class UsuariosDaoImpl implements UsuariosDao {
 		TiposDeUsuarios TipoU = new TiposDeUsuarios();
 		
 		try {
-			ResultSet rs= cn.query("select IdUsuario,DNI,Cuil,Nombre,Apellido,FechaNacimiento,Email,NombreUsuario,Contraseña,U.IdGenero,ESTADO,U.IdTipoDeUsuario,G.DescripcionGenero,TU.DescripcionTipoDeUsuario from usuarios As U inner join generos As G ON G.IdGenero = U.IdGenero inner join tiposdeusuarios As TU ON TU.IdTipoDeUsuario = U.IdTipoDeUsuario where NombreUsuario = '"+Usuario+"' AND Contraseña = '"+Password+"'"); 
+			ResultSet rs= cn.query("select IdUsuario,DNI,Cuil,Nombre,Apellido,FechaNacimiento,"
+					+ "Email,NombreUsuario,Contraseña,U.IdGenero,ESTADO,U.IdTipoDeUsuario,"
+					+ "G.DescripcionGenero,TU.DescripcionTipoDeUsuario, U.Direccion, U.NumeroDeTelefono "
+					+ "from usuarios As U "
+					+ "inner join generos As G ON G.IdGenero = U.IdGenero "
+					+ "inner join tiposdeusuarios As TU ON TU.IdTipoDeUsuario = U.IdTipoDeUsuario "
+					+ "where NombreUsuario = '"+Usuario+"' AND Contraseña = '"+Password+"'"); 
 			rs.next();
 			
 			user.setIdUsuario(rs.getInt("IdUsuario"));
@@ -223,6 +229,8 @@ public class UsuariosDaoImpl implements UsuariosDao {
 			TipoU.setIdTipoDeUsuario(rs.getInt(12));
 			TipoU.setDescripcionTipoDeUsuario(rs.getString(14));
 			user.setTipoDeUsuario(TipoU);
+			user.setDireccion(rs.getString("Direccion"));
+			user.setNumeroDeTelefono(rs.getString("NumeroDeTelefono"));
 		
 		} catch (Exception e) {
 		

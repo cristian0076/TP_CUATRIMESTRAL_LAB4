@@ -132,8 +132,14 @@ if(request.getParameter("btnAgregar")!=null) {
 				error = 1;
 			}
 			
+			try {	
+			
 			if(request.getParameter("txtEmailA").toString() != null && request.getParameter("txtEmailA").toString() != "") {
 				user.setEmail(request.getParameter("txtEmailA").toString());
+				
+				// Excepción propia en Cliente //				
+				Usuarios.validaMail(request.getParameter("txtEmailA").toString());
+				
 				if(user.getEmail().length() > 50 ) {
 					error = 1;
 					String texto;
@@ -145,6 +151,12 @@ if(request.getParameter("btnAgregar")!=null) {
 				error = 1;
 			}
 			
+			} catch (Exception e) {
+				error = 1;
+				String texto;
+				texto = e.getMessage();
+				request.setAttribute("Error", texto);
+			}
 			if(request.getParameter("txtUsuarioA").toString() != null && request.getParameter("txtUsuarioA").toString() != "") {
 				user.setNombreUsuario(request.getParameter("txtUsuarioA").toString());
 				if(user.getNombreUsuario().length() > 50 || user.getNombreUsuario().length() < 8 ) {

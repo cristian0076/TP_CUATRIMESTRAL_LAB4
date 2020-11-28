@@ -2,6 +2,9 @@ package entidad;
 
 import java.util.Date;
 
+import excepciones.FaltaArrobaException;
+
+
 
 public class Usuarios {
 
@@ -155,6 +158,24 @@ public class Usuarios {
 
 	public void setDireccion(String direccion) {
 		Direccion = direccion;
+	}
+	
+	public static boolean validaMail(String mail) throws FaltaArrobaException
+	{
+		Boolean contieneArroba = false;
+		
+		for (int i=0 ;i<mail.length(); i++)
+		{
+			if (mail.charAt(i) == '@')
+				contieneArroba=true;
+		}
+		if (!contieneArroba)
+		{
+			FaltaArrobaException exc = new FaltaArrobaException();
+			throw exc;
+		}
+		
+		return contieneArroba;
 	}
 
 
