@@ -31,18 +31,17 @@
  </style>
 	
 <!--Paginado-->
-<link rel="stylesheet" type="text/css"
-	href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
-
-<script type="text/javascript" charset="utf8"
-	src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+  
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
 
 
-<script type="text/javascript">
- 	$(document).ready( function () {
- 		$('#tablaCuentas').DataTable();
- 	} );
+ <script type="text/javascript">
+ $(document).ready( function () {
+ $('#table_id').DataTable();
+ } );
  </script>
+
 
 </head>
 
@@ -142,7 +141,7 @@
 
 					<div class="col-md-12 col-sm-4">
 
-						<table id="tablaCuentas" class="table-dark">
+						<table id="table_id" class="table-dark" style="overflow:auto;">
 							<thead>
 								<tr>
 									<th scope="col"></th>
@@ -170,30 +169,31 @@
 											if (cu.getCantidadPrestamos() > 0){
 								%>
 								<tr style="color: black">
+
 									<form method="post" action="ServletPrestamoAdm">
-										<td><input HeaderText="Borrado" class="btn btn-primary"
-											type="submit" name="btnListar" Onclick="abrir()"
+										<td><input HeaderText="Borrado" class="btn btn-primary"	type="submit" name="btnListar" Onclick="abrir()"
 											id="btnListar" value="Listar"></td>
 											
-										<th scope="row"><%=cu.getUsuario().getIdUsuario()%> 
-											<input type="hidden" name="idUsuario" value="<%=cu.getUsuario().getIdUsuario()%>">
-										</th>
+										<td scope="row"><%=cu.getUsuario().getIdUsuario()%><input type="hidden" name="idUsuario" value="<%=cu.getUsuario().getIdUsuario()%>">
+										</td>
 										<td><%=cu.getUsuario().getNombreUsuario()%></td>
 										<td><%=cu.getUsuario().getNombre()%></td>
 										<td><%=cu.getUsuario().getApellido()%></td>
-										<td><%=cu.getUsuario().getEmail()%></td>
+										<td><%=cu.getUsuario().getEmail()%></td>										
 										<td><%=cu.getUsuario().getDni()%></td>
 										<td><%=cu.getUsuario().getCuil()%></td>
-										<th scope="row" Style="text-align:center;"><%=cu.getCantidadPrestamos()%> 
-											<input type="hidden" name="idUsuario" value="<%=cu.getUsuario().getIdUsuario()%>">
-										</th>
+										<td scope="row" Style="text-align:center;"><%=cu.getCantidadPrestamos()%><input type="hidden" name="idUsuario" value="<%=cu.getUsuario().getIdUsuario()%>">
+										</td>
 									</form>
-								</tr>
-							</tbody>
-							<%
+									<%
 											}
-								}
 							%>
+								</tr>
+								<%
+											}
+							%>
+							</tbody>
+
 						</table>
 					</div>
 				</div>
@@ -254,15 +254,23 @@
 							<%
 								if (PrestamosUsuario != null) {
 									for (Prestamos c : PrestamosUsuario) {
+										//if (c.getEstadoPrestamo().getIdEstado() == 1){
 							%>
 							<tbody>
 								<tr>
 									<form method="post" action="ServletPrestamoAdm">
+									
+									<%if (c.getEstadoPrestamo().getIdEstado() == 1){  %>
 										<td><input HeaderText="Modificar" class="btn btn-primary"
 											type="submit" name="btnModalModificar"
 											Onclick="abrirModificar()" id="btnModalModificar"
 											value="Autorizar"></td>
-
+									<% }else{ %>									
+												<td><input HeaderText="Modificar" class="btn btn-primary"
+											type="submit" name="btnModalModificar"
+											Onclick="abrirModificar()" id="btnModalModificar"
+											value="Autorizar" disabled></td>
+									<%}%>
 										<th scope="row"><%=c.getUsuario().getIdUsuario()%></th>
 										<td><%=c.getUsuario().getApellido()%></td>
 										<td><%=c.getImporteSolicitado()%></td>
@@ -275,8 +283,9 @@
 									</form>
 								</tr>
 								<%
-									}
+									
 										}
+								}
 								%>
 							</tbody>
 						</table>

@@ -139,7 +139,7 @@ public class PrestamosDaoImpl implements PrestamosDao {
 
 			
 			
-			ResultSet rs = cn.query("SELECT u.IdUsuario,p.idUsuario, p.IdPrestamo, u.Apellido,c.NroDeCuenta,edp.IdEstado ,c.IdTipoDeCuenta,tdc.Descripcion,c.CBU, u.Cuil,p.Fecha, p.ImporteConIntereses,p.ImporteSolicitado, p.PlazoDePago, p.ValorCuotaMensual, edp.Descripcion FROM prestamos p RIGHT JOIN usuarios u ON u.IdUsuario = p.IdUsuario LEFT JOIN estadosdeprestamo edp ON p.IdEstado = edp.IdEstado LEFT JOIN Cuentas c ON c.IdUsuario = p.IdUsuario LEFT JOIN tiposdecuentas tdc ON tdc.IdTipoDeCuenta = c.IdTipoDeCuenta WHERE u.IdUsuario = "+ IdUsuario);
+			ResultSet rs = cn.query("SELECT u.IdUsuario,p.idUsuario, p.IdPrestamo, u.Apellido,c.NroDeCuenta,edp.IdEstado ,c.IdTipoDeCuenta,tdc.Descripcion,c.CBU, u.Cuil,p.Fecha, p.ImporteConIntereses,p.ImporteSolicitado, p.PlazoDePago, p.ValorCuotaMensual, edp.Descripcion FROM prestamos p RIGHT JOIN usuarios u ON u.IdUsuario = p.IdUsuario LEFT JOIN estadosdeprestamo edp ON p.IdEstado = edp.IdEstado LEFT JOIN Cuentas c ON c.NroDeCuenta = p.NroDeCuenta LEFT JOIN tiposdecuentas tdc ON tdc.IdTipoDeCuenta = c.IdTipoDeCuenta WHERE u.IdUsuario = "+ IdUsuario);
 			while(rs.next())
 			{
 				
@@ -307,7 +307,7 @@ public class PrestamosDaoImpl implements PrestamosDao {
 		
 		boolean sp_check = false;
 		
-		String sp_pago_cuota = "call SP_PagoCuota "+"("+idcuenta+","+idprestamo+","+nrocuota+",'"+importe+")";
+		String sp_pago_cuota = "call SP_PagoCuota "+"("+idcuenta+","+idprestamo+","+nrocuota+","+importe+")";
 		
 		try {
 		

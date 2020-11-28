@@ -37,7 +37,7 @@ public class PrestamosPorUsuarioDaoImpl implements PrestamosPorUsuarioDao {
 		try {
 			
 			 
-			ResultSet rs = cn.query("SELECT U.idUsuario, U.NombreUsuario, U.Nombre, U.Apellido, U.Email, U.DNI, U.Cuil, (SELECT COUNT(*) From prestamos C WHERE C.IdUsuario = U.IdUsuario) AS CantidadPrestamos FROM usuarios u");
+			ResultSet rs = cn.query("SELECT U.idUsuario, U.NombreUsuario, U.Nombre, U.Apellido, U.Email, U.DNI, U.Cuil, (SELECT COUNT(*) From prestamos C WHERE C.IdUsuario = U.IdUsuario) AS CantidadPrestamos FROM usuarios u WHERE U.NombreUsuario like  '%"+Nombre+"%' AND U.Email LIKE '%"+Email+"%' AND U.DNI LIKE '%"+Dni+"%' AND U.Cuil LIKE '%"+Cuil+"%'");
 
 			System.out.println("RESULLLTTT "+ rs);
 			while(rs.next())
