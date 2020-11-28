@@ -69,7 +69,6 @@
 		<%
 			if(request.getSession().getAttribute("Session_user") != null){
 				us= (Usuarios)request.getSession().getAttribute("Session_user");
-         	   	System.out.println(u.getApellido()); 
 			}
          	   %>
          	   <%if(us.getApellido() != null){ %>
@@ -113,8 +112,10 @@
                     	<h1 id="1" style="text-align: center; color:green; padding-top: 50px;" class="font-italic text">Cliente agregado con exito.</h1>
                     	<%filas = 2; %>
                   <%} else{ if(filas == 0){%>
+                  		<%if(texto == null){
+                  			texto = "Verifique los campos que no se pueden repetir";
+                  		}%>
                   		<h3 id="1" style="text-align: center; color:red; padding-top: 50px;" class="font-italic text"><%= "Error al agregar cliente."+" "+texto %></h3>
-                  		 <script>alert(<%=texto%>)</script> 
                   		 <%filas = 2; %>
                   <%}} %>
                   
@@ -151,7 +152,6 @@
                     	<%filas2 = 2; %>
                   <%} else{ if(filas2 == 0){%>
                   		<h3 id="1" style="text-align: center; color:red; padding-top: 50px;" class="font-italic text"><%= "Error al modificar cliente."+" "+texto2 %></h3>
-                  		 <script>alert(<%=texto2%>)</script> 
                   		 <%filas2 = 2; %>
                   <%}} %>
                   
@@ -210,11 +210,11 @@
                 </form>
             </div>
         </div>
-        <div class="row" style="overflow:auto; height:400px;">
+        <div class="row" >
             <div class="col-md-1 col-sm-4"></div>
             <div class="col-md-10 col-sm-4">
 
-<table id="table_id" class="table table-dark" style="overflow:auto; height:400px;">
+<table id="table_id" class="table table-dark">
   <thead>
     <tr>
        <th scope="col"></th>
@@ -237,7 +237,6 @@
 	}else{
 		if(request.getAttribute("BusquedaCu")!= null){
 			ListaUsuarios = (ArrayList<Usuarios>)request.getAttribute("BusquedaCu");
-			System.out.println(ListaUsuarios);
 		}
 	}			
   %>
@@ -328,7 +327,6 @@
                         <input type="text" value =<%=u.getNumeroDeTelefono() %>   class="form-control" name="TELEFONOM" Style="margin: 5px;" onkeypress="javascript:return solonumeros(event)" required="required" placeholder="Telefono">
                         <h5>Direccion</h5>
                         <input type="text" value ="<%=u.getDireccion() %>"  class="form-control" name="DIRECCIONM" Style="margin: 5px;" required="required" >
-                         <% System.out.println(u); %>
                         <%}%>
                     </div>
                 </div>

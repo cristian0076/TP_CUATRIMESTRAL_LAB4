@@ -219,7 +219,12 @@ if(request.getParameter("btnAgregar")!=null) {
 				request.setAttribute("insert",0);
 			}
 			else {
-				filas = negocio.insertar(user);
+				try {
+					filas = negocio.insertar(user);
+				} catch (Exception e) {
+					System.out.println(e.toString());
+				}
+				
 			}
 				
 		

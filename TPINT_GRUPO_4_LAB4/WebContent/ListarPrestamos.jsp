@@ -271,11 +271,52 @@
             });
             <%}%>
         </script>
-  
-  
-  
 
-  <!-- The Modal -->
+
+		<%
+			if(request.getAttribute("SolicitudOk") != null) {
+				
+		%>
+
+
+		<script type="text/javascript">
+			$(function() {
+				$('#modalSolicitudOk').modal();
+			});
+		</script>
+
+
+		<%
+			
+		%>
+		<%
+			}
+		%>
+
+<div class="modal fade bd-example-modal-sm" id="modalSolicitudOk" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel2">Solicitud confirmada</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                    <% if(request.getAttribute("SolicitudOk") != null) {%>
+                     <h5><%=request.getAttribute("SolicitudOk").toString() %></h5>
+                     <%
+                     request.setAttribute("SolicitudOk", null);
+                    } %>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+		<!-- The Modal -->
    <div class="modal fade bd-example-modal-lg" id="ModalPagar" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <form method= "post" action="ServletPrestamoCLI?Param=5">
         <div class="modal-dialog modal-lg">
@@ -300,20 +341,6 @@
 							   <%if(cuenta.getNroDeCuenta() != 0){ %>
 								<option value="<%= cuenta.getNroDeCuenta() %>"><%= "Nro: "+cuenta.getNroDeCuenta()+" - "+ cuenta.getTipoDeCuenta().getDescripcion() %></option>
 								<%} %>
-								<%} %>
-								
-								
-								<% if(request.getAttribute("SolicitudOk")!= null){ %>
-									
-			
- 										<script type="text/javascript">
- 						 				$(function(){
- 						  					$('#modalSolicitudOk').modal();
- 						 				});
- 										</script>
-									
-									
-									<%request.setAttribute("SolicitudOk", null); %>
 								<%} %>
 							</select>
                     </div>

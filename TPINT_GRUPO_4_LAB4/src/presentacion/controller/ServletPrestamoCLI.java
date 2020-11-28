@@ -74,6 +74,14 @@ public class ServletPrestamoCLI extends HttpServlet {
 				ArrayList<PrestamoPorCuota> listaCuotas =new ArrayList<PrestamoPorCuota>();
 				PrestamoPorCuotaNegImpl negocio = new PrestamoPorCuotaNegImpl();
 				
+				//Cargar tabla en ListarPrestamos
+				Usuarios u = new Usuarios();
+				u= (Usuarios)request.getSession().getAttribute("Session_user");
+				ArrayList<Prestamos> ListaPrestamos = new ArrayList <Prestamos>();
+				PrestamosNegImpl negocioPrestamos = new PrestamosNegImpl();
+				ListaPrestamos =  (ArrayList<Prestamos>) negocioPrestamos.ListarPrestamosxUsuario(u.getIdUsuario());
+				request.setAttribute("AllPrestamos", ListaPrestamos);
+
 				if(request.getParameter("ValorCuota")!=null) {
 					request.getSession().setAttribute("ValorCuota2",Float.parseFloat(request.getParameter("ValorCuota")));
 				}
@@ -108,6 +116,11 @@ public class ServletPrestamoCLI extends HttpServlet {
 				
 				request.setAttribute("Pagar",1);
 				
+				//Cargar tabla en ListarPrestamos
+				ArrayList<Prestamos> ListaPrestamos = new ArrayList <Prestamos>();
+				PrestamosNegImpl negocioPrestamos = new PrestamosNegImpl();
+				ListaPrestamos =  (ArrayList<Prestamos>) negocioPrestamos.ListarPrestamosxUsuario(u.getIdUsuario());
+				request.setAttribute("AllPrestamos", ListaPrestamos);
 				
 				RequestDispatcher rd = request.getRequestDispatcher("/ListarPrestamos.jsp");   
 				rd.forward(request, response);
@@ -115,15 +128,46 @@ public class ServletPrestamoCLI extends HttpServlet {
 		}
 		else {
 			if(parametro==5) {
+				if(request.getParameter("btnPagar")!= null) {
 				PrestamosNegImpl negocio = new PrestamosNegImpl();
 				boolean estado = false;
 				int nro_cuota = Integer.parseInt(request.getSession().getAttribute("Numero_Cuota").toString());
 				int IDcuenta = Integer.parseInt(request.getParameter("cboCuenta"));
 				int IDprestamo = Integer.parseInt(request.getSession().getAttribute("ID_PRESTAMO").toString());
 				float saldo = Float.parseFloat(request.getSession().getAttribute("ValorCuota2").toString());
-				negocio.Pagar_cuota(IDcuenta,IDprestamo,nro_cuota,saldo);
+				
+				try {
+					negocio.Pagar_cuota(IDcuenta,IDprestamo,nro_cuota,saldo);
+					request.setAttribute("SolicitudOk","El pago se efectuo con exito.");
+				} catch (Exception e) {
+					request.setAttribute("SolicitudOk","El pago tuvo un error reintente el pago.");
+				}
+				
+				
+				//Cargar tabla en ListarPrestamos
+				Usuarios u = new Usuarios();
+				u= (Usuarios)request.getSession().getAttribute("Session_user");
+				ArrayList<Prestamos> ListaPrestamos = new ArrayList <Prestamos>();
+				PrestamosNegImpl negocioPrestamos = new PrestamosNegImpl();
+				ListaPrestamos =  (ArrayList<Prestamos>) negocioPrestamos.ListarPrestamosxUsuario(u.getIdUsuario());
+				request.setAttribute("AllPrestamos", ListaPrestamos);
 				RequestDispatcher rd = request.getRequestDispatcher("/ListarPrestamos.jsp");   
 				rd.forward(request, response);
+				}
+				if(request.getParameter("btnCancelar")!= null) {
+					//Cargar tabla en ListarPrestamos
+					
+					Usuarios u = new Usuarios();
+					u= (Usuarios)request.getSession().getAttribute("Session_user");
+					ArrayList<Prestamos> ListaPrestamos = new ArrayList <Prestamos>();
+					PrestamosNegImpl negocioPrestamos = new PrestamosNegImpl();
+					ListaPrestamos =  (ArrayList<Prestamos>) negocioPrestamos.ListarPrestamosxUsuario(u.getIdUsuario());
+					request.setAttribute("AllPrestamos", ListaPrestamos);
+					
+					RequestDispatcher rd = request.getRequestDispatcher("/ListarPrestamos.jsp");   
+					rd.forward(request, response);
+				}
+				
 			}
 		ArrayList<Cuentas> listaC=new ArrayList<Cuentas>();
 		CuentasNegImpl negocio = new CuentasNegImpl();
