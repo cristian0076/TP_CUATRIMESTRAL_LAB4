@@ -156,6 +156,7 @@
 								<tr>
 									<th scope="col"></th>
 									<th scope="col" style="text-align: center" >Nro cuota</th>
+									<th scope="col" style="text-align: center" >Importe</th>
 									<th scope="col" style="text-align: center" >Fecha</th>
 									<th scope="col" style="text-align: center" >Estado de pago</th>
 								</tr>
@@ -244,6 +245,7 @@
 											<%} %>
 										<%} %>
 										<td style="text-align: center" ><%=c.getNroCuota() %><input type="hidden" name="NUMEROCUOTA" value="<%=c.getNroCuota() %>" ></td>
+										<td style="text-align: center" ><%=request.getSession().getAttribute("ValorCuota2").toString()%></td>
 										<td style="text-align: center" ><%=c.getFechaPago()%></td>
 										<td style="text-align: center" ><%=c.getEstado() %></td>
 										<th scope="row" Style="text-align:center;"><input
